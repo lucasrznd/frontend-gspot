@@ -8,17 +8,17 @@ export default function MenuApp() {
         {
             label: 'Spots',
             icon: 'pi pi-microphone',
-            url: '/contrato'
+            url: '/'
         },
         {
             label: 'Empresas',
             icon: 'pi pi-building',
-            url: '/parcela'
+            url: '/empresa'
         },
         {
             label: 'Locutores',
             icon: 'pi pi-users',
-            url: '/imovel'
+            url: '/locutor'
         }
     ];
 
