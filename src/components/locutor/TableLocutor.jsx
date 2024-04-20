@@ -41,8 +41,8 @@ export default function TableLocutor(props) {
     const acoesTable = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" rounded className="mr-2" onClick={() => props.detalhesLocutor(rowData)} />
-                <span style={{ margin: "15px" }} className="pi pi-ellipsis-v"></span>
+                <Button icon="pi pi-pencil" rounded onClick={() => props.detalhesLocutor(rowData)} />
+                <span style={{ marginBottom: "1rem", marginLeft: "5px", marginRight: "5px" }} className="pi pi-ellipsis-v"></span>
                 <Button icon="pi pi-trash" rounded severity="danger" onClick={() => confirmDeleteLocutor(rowData)} />
             </React.Fragment>
         );
