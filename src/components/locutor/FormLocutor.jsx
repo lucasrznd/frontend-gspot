@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { LocutorModel } from "../../models/LocutorModel";
 import TableLocutor from "./TableLocutor";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputMask } from "primereact/inputmask";
 import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
+import { msgInformativa } from "../../functions/Mensagens";
 
 export default function FormLocutor(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
+    const toast = useRef(null);
 
     function novoLocutor() {
         props.setLocutor(new LocutorModel());
@@ -16,6 +19,7 @@ export default function FormLocutor(props) {
 
     const salvarLocutorAction = () => {
         setVisualizarModal(false);
+        msgInformativa(toast, 'Locutor salvo com sucesso.');
     }
 
     const detalhesLocutor = (locutor) => {
@@ -42,6 +46,8 @@ export default function FormLocutor(props) {
 
     return (
         <div>
+            <Toast ref={toast} />
+
             <TableLocutor conteudoInicial={conteudoInicial} detalhesLocutor={detalhesLocutor}
                 locutor={props.locutor} setLocutor={props.setLocutor} locutores={props.locutores} />
 
@@ -50,7 +56,7 @@ export default function FormLocutor(props) {
                 <div className="card p-fluid">
                     <div className="field">
                         <label htmlFor='nome' style={{ marginBottom: '0.5rem' }}>Nome:</label>
-                        <InputText id="nome" value={props.locutor?.nome} onChange={(e) => props.setLocutor({ ...props.locutor, nome: e.target.value })} />
+                        <InputText id="nome" value={props.locutor?.nome} onChange={(e) => props.setLocutor({ ...props.locutor, nome: e.target.value })} className="uppercase" />
                     </div>
 
                     <div className="field">
