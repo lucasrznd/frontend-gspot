@@ -6,9 +6,9 @@ import AppRoutes from './routes/Routes';
 
 function App() {
   return (
-    <div className="App">
-      <AppRoutes />
-    </div>
+      <div className="App">
+        <AppRoutes />
+      </div>
   );
 }
 
