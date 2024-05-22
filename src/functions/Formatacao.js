@@ -2,6 +2,11 @@ export function formatarParaUppercase(rowData, columnName) {
     return rowData[columnName].toUpperCase();
 }
 
+export function cleanNumber(number) {
+    const formattedNumber = number.replace(/\D/g, '');
+    return formattedNumber;
+}
+
 export function formatarTelefone(rowData) {
     const numeroLimpo = rowData['telefone'].replace(/\D/g, '');
 
