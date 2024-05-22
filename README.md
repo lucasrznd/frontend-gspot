@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+<h2 align="center">SPOT Management System</h2>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
 
-## Available Scripts
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
+</div>
 
-In the project directory, you can run:
+<p align="center">
+ <a href="#description">Description</a> • 
+ <a href="#features">Features</a> • 
+ <a href="#installation">Installation</a> •
+ <a href="#contribution">Contribution</a> 
+</p>
 
-### `npm start`
+<h2 id="description">🤝 Contribution</h2>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The **SPOT Management System** is a web application developed in ReactJS for managing SPOTS, which are short recordings sold by a radio company. The application allows you to register announcers, associated companies, and spots, making it easy to control and search for all registered spots.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<h2 id="features">✨ Features</h2>
 
-### `npm test`
+- **Announcer Registration**: Add and manage announcers who make the recordings.
+- **Company Registration**: Add and manage companies associated with the recordings.
+- **Spot Registration**: Add and manage spots, specifying the title, announcer, and associated company.
+- **Spot Search**: Perform searches to quickly find specific spots.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Technologies Used
 
-### `npm run build`
+- **ReactJS**: JavaScript library for building user interfaces.
+- **PrimeReact**: UI component library for React.
+- **Primeflex**: CSS utility library for flexible layouts.
+- **React Query**: Library for server state management and data caching.
+- **Jest**: JavaScript testing framework.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Before starting, make sure you have the following tools installed on your machine:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-### `npm run eject`
+<h2 id="installation">🛠️ Installation</h2>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Follow the steps below to set up the project on your local machine:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/lucasrznd/frontend-gspot.git
+    cd frontend-gspot
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. Install the project dependencies:
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Running the Application
 
-## Learn More
+To start the application in development mode, run the command:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm start
+# or
+yarn start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<h2 id="contribution">🤝 Contribution</h2>
 
-### Code Splitting
+Contributions are welcome! If you have suggestions, improvements, or find bugs, feel free to open an issue or submit a pull request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+<h2 id="author">👨🏻‍💻 Author</h2>
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lucasrznd"><img src="https://avatars.githubusercontent.com/u/101664450?v=4&v=" width="115px;" alt="Lucas Rezende"/><br /><sub><b>Lucas Rezende</b></sub></a><br/><a title="Código">💻</a></td>
+  </tbody>
+</table>
