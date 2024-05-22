@@ -14,7 +14,7 @@
  <a href="#contribution">Contribution</a> 
 </p>
 
-<h2 id="description">🤝 Contribution</h2>
+<h2 id="description">📙 Description</h2>
 
 The **SPOT Management System** is a web application developed in ReactJS for managing SPOTS, which are short recordings sold by a radio company. The application allows you to register announcers, associated companies, and spots, making it easy to control and search for all registered spots.
 
