@@ -9,13 +9,13 @@ import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
 import DeleteDialog from '../DeleteDialog';
 import { formatarParaUppercase, formatarTelefone } from '../../functions/Formatacao';
-import { useLocutorDelete } from '../../hooks/useLocutorDelete';
+import { useLocutorDelete } from '../../hooks/locutor/useLocutorDelete';
 import { msgAviso, msgErro } from '../../functions/Mensagens';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Avatar } from 'primereact/avatar';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useLocutorData } from '../../hooks/useLocutorData';
+import { useLocutorData } from '../../hooks/locutor/useLocutorData';
 import ImageDialog from '../ImageDialog';
 
 export default function TableLocutor(props) {

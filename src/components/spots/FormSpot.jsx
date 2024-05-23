@@ -10,7 +10,7 @@ import { useEmpresaData } from '../../hooks/empresa/useEmpresaData';
 import { AutoComplete } from "primereact/autocomplete";
 import { useSpotMutate } from "../../hooks/spot/useSpotMutate";
 import { useSpotPut } from "../../hooks/spot/useSpotPut";
-import { useLocutorData } from '../../hooks/useLocutorData';
+import { useLocutorData } from '../../hooks/locutor/useLocutorData';
 import { Calendar } from "primereact/calendar";
 import { InputMask } from "primereact/inputmask";
 import { Checkbox } from "primereact/checkbox";
