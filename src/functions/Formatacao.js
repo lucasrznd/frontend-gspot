@@ -24,3 +24,15 @@ export function formatarTelefone(rowData) {
     const numeroFormatado = `(${codigoArea}) ${parte1} ${parte2}-${parte3}`;
     return numeroFormatado;
 }
+
+export function formatarPreco(rowData) {
+    return 'R$ ' + rowData + ',00';
+}
+
+export function formatarData(rowData, columnName) {
+    if (rowData && rowData[columnName]) {
+        const data = new Date(rowData[columnName]);
+        return data.toLocaleDateString('pt-BR');
+    }
+    return '';
+}
