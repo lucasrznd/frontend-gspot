@@ -8,7 +8,7 @@ export default function MenuApp() {
         {
             label: 'Spots',
             icon: 'pi pi-microphone',
-            url: '/spots'
+            url: '/spot'
         },
         {
             label: 'Empresas',
