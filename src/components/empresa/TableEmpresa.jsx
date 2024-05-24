@@ -114,7 +114,7 @@ export default function TableEmpresa(props) {
                         rows={5} emptyMessage="Nenhum empresa encontrado." key="id">
                         <Column field="id" header="Código" align="center" alignHeader="center"></Column>
                         <Column field="nome" body={(rowData) => formatarParaUppercase(rowData, "nome")} header="Nome" align="center" alignHeader="center"></Column>
-                        <Column field="telefone" body={(rowData) => formatarTelefone(rowData)} header="Telefone" align="center" alignHeader="center"></Column>
+                        <Column field="telefone" body={(rowData) => formatarTelefone(rowData, 'telefone')} header="Telefone" align="center" alignHeader="center"></Column>
                         <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
                         <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
                     </DataTable>

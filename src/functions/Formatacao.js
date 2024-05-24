@@ -7,22 +7,22 @@ export function cleanNumber(number) {
     return formattedNumber;
 }
 
-export function formatarTelefone(rowData) {
-    const numeroLimpo = rowData['telefone'].replace(/\D/g, '');
+export function formatarTelefone(rowData, columnName) {
+    const cleanNumber = rowData[columnName].replace(/\D/g, '');
 
-    // Verifica se o número possui pelo menos 10 dígitos
-    if (numeroLimpo.length < 10) {
-        return rowData['telefone']; // Retorna o número original se for inválido
+    // Verify if size have at least 10 digits
+    if (cleanNumber.length < 10) {
+        return rowData[columnName]; // Return original number if is invalid
     }
 
-    // Formatação do número de telefone
-    const codigoArea = numeroLimpo.substring(0, 2);
-    const parte1 = numeroLimpo.substring(2, 3);
-    const parte2 = numeroLimpo.substring(3, 7);
-    const parte3 = numeroLimpo.substring(7, 11);
+    // Formatting number
+    const areaCode = cleanNumber.substring(0, 2);
+    const part1 = cleanNumber.substring(2, 3);
+    const part2 = cleanNumber.substring(3, 7);
+    const part3 = cleanNumber.substring(7, 11);
 
-    const numeroFormatado = `(${codigoArea}) ${parte1} ${parte2}-${parte3}`;
-    return numeroFormatado;
+    const formattedNumber = `(${areaCode}) ${part1} ${part2}-${part3}`;
+    return formattedNumber;
 }
 
 export function formatarPreco(rowData) {
