@@ -7,33 +7,33 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
-import DeleteDialog from '../DeleteDialog';
-import { formatarParaUppercase, formatarTelefone } from '../../functions/Formatacao';
-import { useEmpresaDelete } from '../../hooks/empresa/useEmpresaDelete';
-import { msgAviso, msgErro } from '../../functions/Mensagens';
+import DeleteDialog from '../dialog/DeleteDialog';
+import { formatPhoneNumber } from '../../functions/StringFormat';
+import { useCompanyDelete } from '../../hooks/company/useCompanyDelete';
+import { errorMsg, warnMsg } from '../../functions/Messages';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Avatar } from 'primereact/avatar';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useEmpresaData } from '../../hooks/empresa/useEmpresaData';
-import ImageDialog from '../ImageDialog';
+import { useCompanyData } from '../../hooks/company/useCompanyData';
+import ImageDialog from '../dialog/ImageDialog';
 
-export default function TableEmpresa(props) {
-    const [empresa, setEmpresa] = useState({});
+export default function CompanyTable(props) {
+    const [company, setCompany] = useState({});
     const [imageVisible, setImageVisible] = useState(false);
-    const [deleteEmpresaDialog, setDeleteEmpresaDialog] = useState(false);
+    const [deleteCompanyDialog, setDeleteEmpresaDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
-    const { data, isLoading, isError: isFetchError } = useEmpresaData();
-    const { mutate, isSuccess, isError } = useEmpresaDelete();
+    const { data, isLoading, isError: isFetchError } = useCompanyData();
+    const { mutate, isSuccess, isError } = useCompanyDelete();
 
-    const deleteEmpresa = () => {
-        mutate(empresa.id);
+    const deleteCompany = () => {
+        mutate(company.id);
 
         if (isError) {
-            msgErro(toast, 'Erro ao remover empresa.');
+            errorMsg(toast, 'Erro ao remover empresa.');
         } else {
-            msgAviso(toast, 'Empresa removida com sucesso.');
+            warnMsg(toast, 'Empresa removida com sucesso.');
         }
     }
 
@@ -41,8 +41,8 @@ export default function TableEmpresa(props) {
         closeModal();
     }, [isSuccess]);
 
-    const confirmDeleteEmpresa = (empresa) => {
-        setEmpresa({ ...empresa });
+    const confirmDeleteCompany = (company) => {
+        setCompany({ ...company });
         setDeleteEmpresaDialog(true);
     };
 
@@ -63,9 +63,9 @@ export default function TableEmpresa(props) {
     const tableActions = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" rounded onClick={() => props.empresaDetails(rowData)} />
+                <Button icon="pi pi-pencil" rounded onClick={() => props.companyDetails(rowData)} />
                 <span style={{ marginBottom: "1rem", marginLeft: "5px", marginRight: "5px" }} className="pi pi-ellipsis-v"></span>
-                <Button icon="pi pi-trash" rounded severity="danger" onClick={() => confirmDeleteEmpresa(rowData)} />
+                <Button icon="pi pi-trash" rounded severity="danger" onClick={() => confirmDeleteCompany(rowData)} />
             </React.Fragment>
         );
     };
@@ -89,7 +89,7 @@ export default function TableEmpresa(props) {
     }
 
     const openTableImageDialog = (rowData) => {
-        setEmpresa({ ...empresa, urlImage: rowData });
+        setCompany({ ...company, urlImage: rowData });
         rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
     }
 
@@ -104,7 +104,7 @@ export default function TableEmpresa(props) {
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
 
                 {isLoading && <ProgressSpinner />}
-                {isFetchError && msgErro(toast, 'Erro ao carregar empresas.')}
+                {isFetchError && errorMsg(toast, 'Erro ao carregar empresas.')}
 
                 <div className="card">
                     <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
@@ -113,18 +113,18 @@ export default function TableEmpresa(props) {
                         currentPageReportTemplate="{first} de {last} de {totalRecords} empresas"
                         rows={5} emptyMessage="Nenhum empresa encontrado." key="id">
                         <Column field="id" header="Código" align="center" alignHeader="center"></Column>
-                        <Column field="nome" body={(rowData) => formatarParaUppercase(rowData, "nome")} header="Nome" align="center" alignHeader="center"></Column>
-                        <Column field="telefone" body={(rowData) => formatarTelefone(rowData, 'telefone')} header="Telefone" align="center" alignHeader="center"></Column>
+                        <Column field="name" body={(rowData) => rowData.name.toUpperCase()} header="Nome" align="center" alignHeader="center"></Column>
+                        <Column field="phoneNumber" body={(rowData) => formatPhoneNumber(rowData, 'phoneNumber')} header="Telefone" align="center" alignHeader="center"></Column>
                         <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
                         <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
                     </DataTable>
                 </div>
             </Panel>
 
-            <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Empresa" src={empresa.urlImage} />
+            <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Empresa" src={company.urlImage} />
 
-            <DeleteDialog deleteObjectDialog={deleteEmpresaDialog} hideDeleteDialog={closeModal} deleteObject={deleteEmpresa}
-                hideDeleteObjectDialog={closeModal} object={empresa} />
+            <DeleteDialog deleteObjectDialog={deleteCompanyDialog} hideDeleteDialog={closeModal} deleteObject={deleteCompany}
+                hideDeleteObjectDialog={closeModal} object={company} />
         </div>
     )
 

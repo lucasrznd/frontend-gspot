@@ -1,9 +1,9 @@
-import MenuApp from "../components/MenuApp";
+import MenuApp from "../components/menu/MenuApp";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import FormSpot from "../components/spots/FormSpot";
-import Rodape from "../components/Rodape";
+import SpotForm from "../components/spot/SpotForm";
+import AppFooter from "../components/footer/AppFooter";
 
-export default function PageSpot() {
+export default function SpotPage() {
     return (
         <div>
             <HelmetProvider>
@@ -13,8 +13,8 @@ export default function PageSpot() {
             </HelmetProvider>
 
             <MenuApp />
-            <FormSpot />
-            <Rodape />
+            <SpotForm />
+            <AppFooter />
         </div>
     )
 }

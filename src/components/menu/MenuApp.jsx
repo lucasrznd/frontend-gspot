@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../src/assets/images/logo-horizontal.png';
+import logo from '../../../src/assets/images/logo-horizontal.png';
 import { MegaMenu } from 'primereact/megamenu';
 
 export default function MenuApp() {

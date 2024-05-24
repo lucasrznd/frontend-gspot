@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import Rodape from "./Rodape";
+import AppFooter from "./AppFooter";
 
 describe('Rodape Component', () => {
     it('should render rodape component', () => {
-        render(<Rodape/>)
+        render(<AppFooter />)
 
         screen.getByText('EducadoraGS - Todos os direitos reservados.©');
     });

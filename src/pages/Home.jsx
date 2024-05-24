@@ -1,11 +1,11 @@
-import MenuApp from "../components/MenuApp";
+import MenuApp from "../components/menu/MenuApp";
+import AppFooter from "../components/footer/AppFooter";
 import HomeBody from "../components/home/HomeBody";
-import Rodape from "../components/Rodape";
 
 export default function HomePage() {
     return <div>
         <MenuApp />
         <HomeBody />
-        <Rodape />
+        <AppFooter />
     </div>
 }

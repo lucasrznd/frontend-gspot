@@ -1,13 +1,9 @@
-export function formatarParaUppercase(rowData, columnName) {
-    return rowData[columnName].toUpperCase();
-}
-
-export function cleanNumber(number) {
+export function clearNumber(number) {
     const formattedNumber = number.replace(/\D/g, '');
     return formattedNumber;
 }
 
-export function formatarTelefone(rowData, columnName) {
+export function formatPhoneNumber(rowData, columnName) {
     const cleanNumber = rowData[columnName].replace(/\D/g, '');
 
     // Verify if size have at least 10 digits
@@ -25,11 +21,11 @@ export function formatarTelefone(rowData, columnName) {
     return formattedNumber;
 }
 
-export function formatarPreco(rowData) {
+export function priceFormat(rowData) {
     return 'R$ ' + rowData + ',00';
 }
 
-export function formatarData(rowData, columnName) {
+export function dateFormat(rowData, columnName) {
     if (rowData && rowData[columnName]) {
         const data = new Date(rowData[columnName]);
         return data.toLocaleDateString('pt-BR');

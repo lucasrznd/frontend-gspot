@@ -1,9 +1,9 @@
-import MenuApp from "../components/MenuApp";
-import FormLocutor from "../components/locutor/FormLocutor";
-import Rodape from "../components/Rodape";
+import MenuApp from "../components/menu/MenuApp";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import AnnouncerForm from "../components/announcer/AnnouncerForm";
+import AppFooter from "../components/footer/AppFooter";
 
-export default function LocutorPage() {
+export default function AnnouncerPage() {
     return (
         <div>
             <HelmetProvider>
@@ -13,8 +13,8 @@ export default function LocutorPage() {
             </HelmetProvider>
 
             <MenuApp />
-            <FormLocutor />
-            <Rodape />
+            <AnnouncerForm />
+            <AppFooter />
         </div>
     )
 }

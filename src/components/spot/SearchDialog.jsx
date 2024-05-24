@@ -5,21 +5,21 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from 'formik';
 import { Avatar } from "primereact/avatar";
-import { msgInformativa } from "../../functions/Mensagens";
+import { infoMsg } from "../../functions/Messages";
 
 export default function SearchDialog(props) {
     const formik = useFormik({
         initialValues: {
-            intervaloData: '',
-            titulo: '',
-            empresa: {},
-            locutor: {},
+            dateRange: '',
+            title: '',
+            company: {},
+            announcer: {},
         },
         validate: (data) => {
             let errors = {};
 
-            if (!data.intervaloData) {
-                errors.intervaloData = 'Intervalo de Data é obrigatório.';
+            if (!data.dateRange) {
+                errors.dateRange = 'Intervalo de Data é obrigatório.';
             }
 
             return errors;
@@ -28,7 +28,7 @@ export default function SearchDialog(props) {
             const data = values;
 
             props.closeSearchDialog();
-            msgInformativa(props.toast, 'Busca realizada com sucesso.');
+            infoMsg(props.toast, 'Busca realizada com sucesso.');
         },
     });
 
@@ -45,22 +45,22 @@ export default function SearchDialog(props) {
         </div>
     );
 
-    const itemTemplateEmpresa = (item) => {
+    const companyItemTemplate = (item) => {
         return (
             <div className="flex align-items-center">
                 <Avatar icon='pi pi-building' image={item.urlImage}
                     className="mr-2 shadow-4" shape="circle" />
-                <div>{item.nome.toUpperCase()}</div>
+                <div>{item.name.toUpperCase()}</div>
             </div>
         );
     };
 
-    const itemTemplateLocutor = (item) => {
+    const announcerItemTemplate = (item) => {
         return (
             <div className="flex align-items-center">
                 <Avatar icon='pi pi-building' image={item.urlImage}
                     className="mr-2 shadow-4" shape="circle" />
-                <div>{item.nome.toUpperCase()}</div>
+                <div>{item.name.toUpperCase()}</div>
             </div>
         );
     };
@@ -71,56 +71,56 @@ export default function SearchDialog(props) {
             <div className="card p-fluid">
                 <form onSubmit={formik.handleSubmit}>
                     <div className="field">
-                        <label htmlFor='intervaloData'>Intervalo de Data:</label>
+                        <label htmlFor='dateRange'>Intervalo de Data:</label>
                         <div className="p-inputgroup flex-1">
                             <span className="p-inputgroup-addon">
                                 <i className="pi pi-calendar"></i>
                             </span>
-                            <Calendar id="intervaloData" value={formik.values.intervaloData} onChange={(e) => formik.setFieldValue('intervaloData', e.value)}
+                            <Calendar id="dateRange" value={formik.values.dateRange} onChange={(e) => formik.setFieldValue('dateRange', e.value)}
                                 selectionMode="range" dateFormat="dd/mm/yy" locale="pt-BR" readOnlyInput hideOnRangeSelection
-                                className={isFormFieldValid('intervaloData') ? "p-invalid uppercase" : "uppercase"} />
+                                className={isFormFieldValid('dateRange') ? "p-invalid uppercase" : "uppercase"} />
                         </div>
-                        {getFormErrorMessage('intervaloData')}
+                        {getFormErrorMessage('dateRange')}
                     </div>
 
                     <div className="field">
-                        <label htmlFor='titulo' >Título:</label>
+                        <label htmlFor='title' >Título:</label>
                         <div className="p-inputgroup flex-1">
                             <span className="p-inputgroup-addon">
                                 <i className="pi pi-microphone"></i>
                             </span>
                             <InputText
-                                id="titulo"
-                                name="titulo"
-                                value={formik.values.titulo}
+                                id="title"
+                                name="title"
+                                value={formik.values.title}
                                 onChange={formik.handleChange} />
                         </div>
                     </div>
 
                     <div className="field">
-                        <label htmlFor='empresa' >Empresa:</label>
+                        <label htmlFor='company' >Empresa:</label>
                         <div className="p-inputgroup flex-1">
                             <span className="p-inputgroup-addon">
-                                <Avatar icon='pi pi-building' image={formik.values.empresa.urlImage}
+                                <Avatar icon='pi pi-building' image={formik.values.company.urlImage}
                                     className="shadow-4" shape="circle" />
                             </span>
-                            <AutoComplete id="empresa" name="empresa" value={formik.values.empresa} suggestions={props.empresaList} field="empresa"
-                                completeMethod={props.completeMethodEmpresa} onChange={(e) => formik.setFieldValue('empresa', e.value)}
-                                itemTemplate={itemTemplateEmpresa} selectedItemTemplate={(empresa) => empresa.nome.toUpperCase()}
+                            <AutoComplete id="company" name="company" value={formik.values.company} suggestions={props.companyList} field="company"
+                                completeMethod={props.companyCompleteMethod} onChange={(e) => formik.setFieldValue('company', e.value)}
+                                itemTemplate={companyItemTemplate} selectedItemTemplate={(company) => company.name.toUpperCase()}
                                 onBlur={formik.handleBlur} />
                         </div>
                     </div>
 
                     <div className="field">
-                        <label htmlFor='locutor' >Locutor:</label>
+                        <label htmlFor='announcer' >Locutor:</label>
                         <div className="p-inputgroup flex-1">
                             <span className="p-inputgroup-addon">
-                                <Avatar icon='pi pi-building' image={formik.values.locutor.urlImage}
+                                <Avatar icon='pi pi-building' image={formik.values.announcer.urlImage}
                                     className="shadow-4" shape="circle" />
                             </span>
-                            <AutoComplete id="locutor" name="locutor" value={formik.values.locutor} suggestions={props.locutorList} field="locutor" key={formik.values.locutor.id}
-                                completeMethod={props.completeMethodLocutor} onChange={(e) => formik.setFieldValue('locutor', e.value)}
-                                itemTemplate={itemTemplateLocutor} selectedItemTemplate={(locutor) => locutor.nome.toUpperCase()}
+                            <AutoComplete id="announcer" name="announcer" value={formik.values.announcer} suggestions={props.announcerList} field="announcer" key={formik.values.announcer.id}
+                                completeMethod={props.announcerCompleteMethod} onChange={(e) => formik.setFieldValue('announcer', e.value)}
+                                itemTemplate={announcerItemTemplate} selectedItemTemplate={(announcer) => announcer.name.toUpperCase()}
                                 onBlur={formik.handleBlur} />
                         </div>
                     </div>

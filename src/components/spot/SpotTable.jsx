@@ -4,17 +4,17 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'primereact/button';
-import DeleteDialog from '../DeleteDialog';
-import { formatarData, formatarParaUppercase, formatarPreco } from '../../functions/Formatacao';
+import DeleteDialog from '../dialog/DeleteDialog';
 import { useSpotDelete } from '../../hooks/spot/useSpotDelete';
-import { msgAviso, msgErro } from '../../functions/Mensagens';
+import { errorMsg, warnMsg } from '../../functions/Messages';
 import { Toast } from 'primereact/toast';
 import { Avatar } from 'primereact/avatar';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useSpotData } from '../../hooks/spot/useSpotData';
-import ImageDialog from '../ImageDialog';
+import ImageDialog from '../dialog/ImageDialog';
+import { dateFormat, priceFormat } from '../../functions/StringFormat';
 
-export default function TableSpot(props) {
+export default function SpotTable(props) {
     const [spot, setSpot] = useState({});
     const [imageVisible, setImageVisible] = useState(false);
     const [deleteSpotDialog, setDeleteSpotDialog] = useState(false);
@@ -27,9 +27,9 @@ export default function TableSpot(props) {
         mutate(spot.id);
 
         if (isError) {
-            msgErro(toast, 'Erro ao remover spot.');
+            errorMsg(toast, 'Erro ao remover spot.');
         } else {
-            msgAviso(toast, 'Spot removido com sucesso.');
+            warnMsg(toast, 'Spot removido com sucesso.');
         }
     }
 
@@ -64,26 +64,26 @@ export default function TableSpot(props) {
 
     const imageBodyEmpresa = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogLocutor(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-            <p className='mr-2'>{rowData.empresa.nome.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.empresa.urlImage} onClick={(e) => openImgDialogEmpresa(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
+            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
+            <p className='mr-2'>{rowData.company.name.toUpperCase()}</p>
+            <Avatar icon="pi pi-building" image={rowData.company.urlImage} onClick={(e) => openImgDialogCompany(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
         </div>
     };
 
-    const imageBodyLocutor = (rowData) => {
+    const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogLocutor(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-            <p className='mr-2'>{rowData.locutor.nome.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.locutor.urlImage} onClick={(e) => openImgDialogLocutor(e.target.currentSrc)} className="shadow-4" shape="circle" />
+            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
+            <p className='mr-2'>{rowData.announcer.name.toUpperCase()}</p>
+            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="shadow-4" shape="circle" />
         </div>
     };
 
-    const openImgDialogEmpresa = (rowData) => {
+    const openImgDialogCompany = (rowData) => {
         setSpot({ ...spot, urlImage: rowData });
         rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
     }
 
-    const openImgDialogLocutor = (rowData) => {
+    const openImgDialogAnnouncer = (rowData) => {
         setSpot({ ...spot, urlImage: rowData });
         rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
     }
@@ -99,7 +99,7 @@ export default function TableSpot(props) {
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
 
                 {isLoading && <ProgressSpinner />}
-                {isFetchError && msgErro(toast, 'Erro ao carregar spots.')}
+                {isFetchError && errorMsg(toast, 'Erro ao carregar spots.')}
 
                 <div className="card">
                     <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
@@ -108,12 +108,12 @@ export default function TableSpot(props) {
                         currentPageReportTemplate="{first} de {last} de {totalRecords} spots"
                         rows={5} emptyMessage="Nenhum spot encontrado." key="id">
                         <Column field="id" header="Código" align="center" alignHeader="center"></Column>
-                        <Column field="titulo" header="Nome" body={(e) => formatarParaUppercase(e, "titulo")} align="center" alignHeader="center"></Column>
-                        <Column field="empresa.nome" header="Empresa" body={(e) => imageBodyEmpresa(e)} align="center" alignHeader="center"></Column>
-                        <Column field="locutor.nome" header="Locutor" body={(e) => imageBodyLocutor(e)} align="center" alignHeader="center"></Column>
-                        <Column field="data" header="Data" body={(e) => formatarData(e, 'data')} align="center" alignHeader="center"></Column>
-                        <Column field="duracao" header="Duração" align="center" alignHeader="center"></Column>
-                        <Column field="preco" header="Preço" body={(e) => formatarPreco(e.preco)} align="center" alignHeader="center"></Column>
+                        <Column field="title" header="Nome" body={(rowData) => rowData.title.toUpperCase()} align="center" alignHeader="center"></Column>
+                        <Column field="company.name" header="Empresa" body={(rowData) => imageBodyEmpresa(rowData)} align="center" alignHeader="center"></Column>
+                        <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
+                        <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
+                        <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
+                        <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
                         <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
                     </DataTable>
                 </div>

@@ -1,25 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import TableLocutor from "./TableLocutor";
+import TableEmpresa from "./CompanyTable";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputMask } from "primereact/inputmask";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { msgErro, msgSucesso } from "../../functions/Mensagens";
+import { errorMsg, successMsg } from "../../functions/Messages";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useLocutorMutate } from "../../hooks/locutor/useLocutorMutate";
-import { useLocutorPut } from "../../hooks/locutor/useLocutorPut";
+import { useCompanyMutate } from "../../hooks/company/useCompanyMutate";
+import { useCompanyPut } from "../../hooks/company/useCompanyPut";
 import { Avatar } from "primereact/avatar";
-import ImageDialog from "../ImageDialog";
+import ImageDialog from "../dialog/ImageDialog";
+import { clearNumber } from "../../functions/StringFormat";
 import { isImgUrl } from "../../functions/Validation";
 
-export default function FormLocutor(props) {
+export default function CompanyForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
     const [imageVisible, setImageVisible] = useState(false);
     const toast = useRef(null);
-    const { mutate, isSuccess } = useLocutorMutate();
-    const { mutate: mutatePut } = useLocutorPut();
+    const { mutate, isSuccess } = useCompanyMutate();
+    const { mutate: mutatePut } = useCompanyPut();
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Nome é obrigatório'),
@@ -28,26 +29,27 @@ export default function FormLocutor(props) {
     const formik = useFormik({
         initialValues: {
             id: undefined,
-            name: '', // Initial value of "name" field
-            phoneNumber: '', // Initial value of "phoneNumber" field
+            name: '',
+            phoneNumber: '',
             urlImage: ''
         },
-        validationSchema: validationSchema, // Validation Schema
+        validationSchema: validationSchema,
         onSubmit: async (values, actions) => {
             const data = values;
+            data.phoneNumber = clearNumber(data.phoneNumber);
 
             if (data.urlImage !== '') {
                 if (await isImgUrl(data.urlImage) === false) {
-                    msgErro(toast, 'Link de imagem inválido.');
+                    errorMsg(toast, 'Link de imagem inválido.');
                     return;
                 }
             }
 
-            // If id != null is made a PUT Request, else a POST Request
+            // If id != null is made a POST Request, else a PUT Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
             closeModalForm();
             actions.resetForm();
-            msgSucesso(toast, 'Locutor salvo com sucesso.');
+            successMsg(toast, 'Empresa salva com sucesso.');
         },
     });
 
@@ -61,7 +63,7 @@ export default function FormLocutor(props) {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    function newAnnouncer() {
+    function newEmpresa() {
         formik.resetForm();
         formik.values.id = undefined;
         formik.values.name = '';
@@ -74,12 +76,12 @@ export default function FormLocutor(props) {
         setVisualizarModal(false);
     }
 
-    const announcerDetails = (announcer) => {
+    const empresaDetails = (empresa) => {
         formik.resetForm();
-        formik.values.id = announcer.id;
-        formik.values.name = announcer.name;
-        formik.values.phoneNumber = announcer.phoneNumber;
-        formik.values.urlImage = announcer.urlImage;
+        formik.values.id = empresa.id;
+        formik.values.name = empresa.name;
+        formik.values.phoneNumber = empresa.phoneNumber;
+        formik.values.urlImage = empresa.urlImage;
         setVisualizarModal(true);
     };
 
@@ -89,7 +91,7 @@ export default function FormLocutor(props) {
 
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-plus-circle" label='Novo' onClick={newAnnouncer} />
+            <Button icon="pi pi-plus-circle" label='Novo' onClick={newEmpresa} />
         </React.Fragment>
     );
 
@@ -112,23 +114,23 @@ export default function FormLocutor(props) {
         <div>
             <Toast ref={toast} />
 
-            <TableLocutor startContent={startContent} announcerDetails={announcerDetails} setLocutor={props.setLocutor} />
+            <TableEmpresa startContent={startContent} empresaDetails={empresaDetails} setEmpresa={props.setEmpresa} />
 
-            <Dialog header="Detalhes do Locutor" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
+            <Dialog header="Detalhes do Empresa" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>
                 <div className="card p-fluid">
                     <form onSubmit={formik.handleSubmit}>
                         <div className="field flex align-items-center justify-content-center">
                             {/* <img src={formik.values.urlImage} alt="Adicione a imagem." onClick={openImageDialog} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-                            <Avatar icon='pi pi-user' image={formik.values.urlImage} onClick={openImageDialog} size="xlarge" className="mr-2 shadow-4" shape="circle" />
-                            <ImageDialog visible={imageVisible} onHide={closeImageDialog} header="Imagem do Locutor" src={formik.values.urlImage} />
+                            <Avatar icon='pi pi-building' image={formik.values.urlImage} onClick={openImageDialog} size="xlarge" className="mr-2 shadow-4" shape="circle" />
+                            <ImageDialog visible={imageVisible} onHide={closeImageDialog} header="Imagem do Empresa" src={formik.values.urlImage} />
                         </div>
 
                         <div className="field">
                             <label htmlFor='name' style={{ marginBottom: '0.5rem' }}>Nome:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
-                                    <i className="pi pi-user"></i>
+                                    <i className="pi pi-building"></i>
                                 </span>
                                 <InputText
                                     id="name"

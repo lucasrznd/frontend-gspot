@@ -7,33 +7,33 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
-import DeleteDialog from '../DeleteDialog';
-import { formatarTelefone } from '../../functions/Formatacao';
-import { useLocutorDelete } from '../../hooks/locutor/useLocutorDelete';
-import { msgAviso, msgErro } from '../../functions/Mensagens';
+import DeleteDialog from '../dialog/DeleteDialog';
+import { errorMsg, warnMsg } from '../../functions/Messages';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Avatar } from 'primereact/avatar';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useLocutorData } from '../../hooks/locutor/useLocutorData';
-import ImageDialog from '../ImageDialog';
+import ImageDialog from '../dialog/ImageDialog';
+import { formatPhoneNumber } from '../../functions/StringFormat';
+import { useAnnouncerData } from '../../hooks/announcer/useAnnouncerData';
+import { useAnnouncerDelete } from '../../hooks/announcer/useAnnouncerDelete';
 
-export default function TableLocutor(props) {
+export default function AnnouncerTable(props) {
     const [announcer, setAnnouncer] = useState({});
     const [imageVisible, setImageVisible] = useState(false);
     const [deleteAnnouncerDialog, setDeleteAnnouncer] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
-    const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useLocutorData();
-    const { mutate, isSuccess, isError } = useLocutorDelete();
+    const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useAnnouncerData();
+    const { mutate, isSuccess, isError } = useAnnouncerDelete();
 
     const deleteAnnouncer = () => {
         mutate(announcer.id);
 
         if (isError) {
-            msgErro(toast, 'Erro ao remover locutor.');
+            errorMsg(toast, 'Erro ao remover locutor.');
         } else {
-            msgAviso(toast, 'Locutor removido com sucesso.');
+            warnMsg(toast, 'Locutor removido com sucesso.');
         }
     }
 
@@ -106,7 +106,7 @@ export default function TableLocutor(props) {
                 rows={5} emptyMessage="Nenhum locutor encontrado." key="id">
                 <Column field="id" header="Código" align="center" alignHeader="center"></Column>
                 <Column field="name" body={(rowData) => rowData.name.toUpperCase()} header="Nome" align="center" alignHeader="center"></Column>
-                <Column field="phoneNumber" body={(rowData) => formatarTelefone(rowData, "phoneNumber")} header="Telefone" align="center" alignHeader="center"></Column>
+                <Column field="phoneNumber" body={(rowData) => formatPhoneNumber(rowData, "phoneNumber")} header="Telefone" align="center" alignHeader="center"></Column>
                 <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
                 <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
             </DataTable>
@@ -123,7 +123,7 @@ export default function TableLocutor(props) {
             <Panel>
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
                 {isLoading && <ProgressSpinner />}
-                {isFetchError && msgErro(toast, 'Erro de conexão com servidor.')}
+                {isFetchError && errorMsg(toast, 'Erro de conexão com servidor.')}
 
                 {showDatatable()}
             </Panel>

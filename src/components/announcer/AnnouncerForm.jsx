@@ -1,55 +1,53 @@
 import React, { useEffect, useRef, useState } from "react";
-import TableEmpresa from "./TableEmpresa";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputMask } from "primereact/inputmask";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { msgErro, msgSucesso } from "../../functions/Mensagens";
+import { errorMsg, successMsg } from "../../functions/Messages";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEmpresaMutate } from "../../hooks/empresa/useEmpresaMutate";
-import { useEmpresaPut } from "../../hooks/empresa/useEmpresaPut";
 import { Avatar } from "primereact/avatar";
-import ImageDialog from "../ImageDialog";
-import { cleanNumber } from "../../functions/Formatacao";
+import ImageDialog from "../dialog/ImageDialog";
 import { isImgUrl } from "../../functions/Validation";
+import AnnouncerTable from "./AnnouncerTable";
+import { useAnnouncerMutate } from "../../hooks/announcer/useAnnouncerMutate";
+import { useAnnouncerPut } from "../../hooks/announcer/useAnnouncerPut";
 
-export default function FormEmpresa(props) {
+export default function AnnouncerForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
     const [imageVisible, setImageVisible] = useState(false);
     const toast = useRef(null);
-    const { mutate, isSuccess } = useEmpresaMutate();
-    const { mutate: mutatePut } = useEmpresaPut();
+    const { mutate, isSuccess } = useAnnouncerMutate();
+    const { mutate: mutatePut } = useAnnouncerPut();
 
     const validationSchema = Yup.object().shape({
-        nome: Yup.string().required('Nome é obrigatório'),
+        name: Yup.string().required('Nome é obrigatório'),
     });
 
     const formik = useFormik({
         initialValues: {
             id: undefined,
-            nome: '', // Initial value of "nome" field
-            telefone: '', // Initial value of "telefone" field
+            name: '', // Initial value of "name" field
+            phoneNumber: '', // Initial value of "phoneNumber" field
             urlImage: ''
         },
         validationSchema: validationSchema, // Validation Schema
         onSubmit: async (values, actions) => {
             const data = values;
-            data.telefone = cleanNumber(data.telefone);
 
             if (data.urlImage !== '') {
                 if (await isImgUrl(data.urlImage) === false) {
-                    msgErro(toast, 'Link de imagem inválido.');
+                    errorMsg(toast, 'Link de imagem inválido.');
                     return;
                 }
             }
 
-            // If id != null is made a POST Request, else a PUT Request
+            // If id != null is made a PUT Request, else a POST Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
             closeModalForm();
             actions.resetForm();
-            msgSucesso(toast, 'Empresa salva com sucesso.');
+            successMsg(toast, 'Locutor salvo com sucesso.');
         },
     });
 
@@ -63,11 +61,11 @@ export default function FormEmpresa(props) {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    function newEmpresa() {
+    function newAnnouncer() {
         formik.resetForm();
         formik.values.id = undefined;
-        formik.values.nome = '';
-        formik.values.telefone = '';
+        formik.values.name = '';
+        formik.values.phoneNumber = '';
         formik.values.urlImage = '';
         setVisualizarModal(true);
     }
@@ -76,12 +74,12 @@ export default function FormEmpresa(props) {
         setVisualizarModal(false);
     }
 
-    const empresaDetails = (empresa) => {
+    const announcerDetails = (announcer) => {
         formik.resetForm();
-        formik.values.id = empresa.id;
-        formik.values.nome = empresa.nome;
-        formik.values.telefone = empresa.telefone;
-        formik.values.urlImage = empresa.urlImage;
+        formik.values.id = announcer.id;
+        formik.values.name = announcer.name;
+        formik.values.phoneNumber = announcer.phoneNumber;
+        formik.values.urlImage = announcer.urlImage;
         setVisualizarModal(true);
     };
 
@@ -91,7 +89,7 @@ export default function FormEmpresa(props) {
 
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-plus-circle" label='Novo' onClick={newEmpresa} />
+            <Button icon="pi pi-plus-circle" label='Novo' onClick={newAnnouncer} />
         </React.Fragment>
     );
 
@@ -114,45 +112,45 @@ export default function FormEmpresa(props) {
         <div>
             <Toast ref={toast} />
 
-            <TableEmpresa startContent={startContent} empresaDetails={empresaDetails} setEmpresa={props.setEmpresa} />
+            <AnnouncerTable startContent={startContent} announcerDetails={announcerDetails} setLocutor={props.setLocutor} />
 
-            <Dialog header="Detalhes do Empresa" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
+            <Dialog header="Detalhes do Locutor" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>
                 <div className="card p-fluid">
                     <form onSubmit={formik.handleSubmit}>
                         <div className="field flex align-items-center justify-content-center">
                             {/* <img src={formik.values.urlImage} alt="Adicione a imagem." onClick={openImageDialog} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-                            <Avatar icon='pi pi-building' image={formik.values.urlImage} onClick={openImageDialog} size="xlarge" className="mr-2 shadow-4" shape="circle" />
-                            <ImageDialog visible={imageVisible} onHide={closeImageDialog} header="Imagem do Empresa" src={formik.values.urlImage} />
+                            <Avatar icon='pi pi-user' image={formik.values.urlImage} onClick={openImageDialog} size="xlarge" className="mr-2 shadow-4" shape="circle" />
+                            <ImageDialog visible={imageVisible} onHide={closeImageDialog} header="Imagem do Locutor" src={formik.values.urlImage} />
                         </div>
 
                         <div className="field">
-                            <label htmlFor='nome' style={{ marginBottom: '0.5rem' }}>Nome:</label>
+                            <label htmlFor='name' style={{ marginBottom: '0.5rem' }}>Nome:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
-                                    <i className="pi pi-building"></i>
+                                    <i className="pi pi-user"></i>
                                 </span>
                                 <InputText
-                                    id="nome"
-                                    name="nome"
-                                    value={formik.values.nome}
+                                    id="name"
+                                    name="name"
+                                    value={formik.values.name}
                                     onChange={formik.handleChange}
-                                    className={isFormFieldValid('nome') ? "p-invalid uppercase" : "uppercase"}
+                                    className={isFormFieldValid('name') ? "p-invalid uppercase" : "uppercase"}
                                 />
                             </div>
-                            {getFormErrorMessage('nome')}
+                            {getFormErrorMessage('name')}
                         </div>
 
                         <div className="field">
-                            <label htmlFor='telefone' style={{ marginBottom: '0.5rem' }}>Telefone:</label>
+                            <label htmlFor='phoneNumber' style={{ marginBottom: '0.5rem' }}>Telefone:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-phone"></i>
                                 </span>
                                 <InputMask
-                                    id="telefone"
-                                    name="telefone"
-                                    value={formik.values.telefone}
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    value={formik.values.phoneNumber}
                                     onChange={formik.handleChange}
                                     mask="(99) 9 9999-9999"
                                     placeholder="(99) 9 9999-9999"

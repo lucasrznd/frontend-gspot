@@ -1,17 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_BASE_URL + '/empresa';
+const API_URL = process.env.REACT_APP_API_BASE_URL + '/company';
 
 const fetchData = async () => {
     const response = await axios.get(API_URL);
     return response.data;
 }
 
-export function useEmpresaData() {
+export function useCompanyData() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['empresa'],
+        queryKey: ['company'],
         refetchInterval: 60 * 5 * 1000
     });
 

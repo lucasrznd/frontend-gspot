@@ -3,14 +3,12 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { msgSucesso } from "../../functions/Mensagens";
+import { successMsg } from "../../functions/Messages";
 import { useFormik } from 'formik';
-import TableSpot from "./TableSpot";
-import { useEmpresaData } from '../../hooks/empresa/useEmpresaData';
+import TableSpot from "./SpotTable";
 import { AutoComplete } from "primereact/autocomplete";
 import { useSpotMutate } from "../../hooks/spot/useSpotMutate";
 import { useSpotPut } from "../../hooks/spot/useSpotPut";
-import { useLocutorData } from '../../hooks/locutor/useLocutorData';
 import { Calendar } from "primereact/calendar";
 import { InputMask } from "primereact/inputmask";
 import { Checkbox } from "primereact/checkbox";
@@ -18,18 +16,20 @@ import { InputNumber } from "primereact/inputnumber";
 import { addLocale } from 'primereact/api';
 import SearchDialog from "./SearchDialog";
 import { Avatar } from "primereact/avatar";
+import { useCompanyData } from "../../hooks/company/useCompanyData";
+import { useAnnouncerData } from "../../hooks/announcer/useAnnouncerData";
 
-export default function FormSpot(props) {
+export default function SpotForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
     const [searchVisible, setSearchVisible] = useState(false);
     const toast = useRef(null);
 
-    const { data: empresaData } = useEmpresaData();
-    const { data: locutorData } = useLocutorData();
+    const { data: companyData } = useCompanyData();
+    const { data: announcerData } = useAnnouncerData();
     const { mutate, isSuccess } = useSpotMutate();
     const { mutate: mutatePut } = useSpotPut();
-    const [empresaList, setEmpresaList] = useState([]);
-    const [locutorList, setLocutorList] = useState([]);
+    const [companyList, setEmpresaList] = useState([]);
+    const [announcerList, setLocutorList] = useState([]);
 
     addLocale('pt-BR', {
         firstDayOfWeek: 0,
@@ -45,43 +45,43 @@ export default function FormSpot(props) {
 
     function cleanData() {
         formik.values.id = undefined;
-        formik.values.titulo = '';
-        formik.values.empresa = '';
-        formik.values.locutor = '';
-        formik.values.data = '';
-        formik.values.duracao = '';
-        formik.values.contratoAtivo = false;
-        formik.values.preco = '';
+        formik.values.title = '';
+        formik.values.company = '';
+        formik.values.announcer = '';
+        formik.values.date = '';
+        formik.values.duration = '';
+        formik.values.activeContract = false;
+        formik.values.price = '';
     }
 
     const formik = useFormik({
         initialValues: {
             id: undefined,
-            titulo: '',
-            empresa: {},
-            locutor: {},
-            data: '',
-            duracao: '',
-            contratoAtivo: false,
-            preco: ''
+            title: '',
+            company: {},
+            announcer: {},
+            date: '',
+            duration: '',
+            activeContract: false,
+            price: ''
         },
         validate: (data) => {
             let errors = {};
 
-            if (!data.titulo) {
-                errors.titulo = 'Título é obrigatório.';
+            if (!data.title) {
+                errors.title = 'Título é obrigatório.';
             }
 
-            if (Object.keys(data.empresa).length === 0) {
-                errors.empresa = 'Empresa é obrigatória.';
+            if (Object.keys(data.company).length === 0) {
+                errors.company = 'Empresa é obrigatória.';
             }
 
-            if (Object.keys(data.locutor).length === 0) {
-                errors.locutor = 'Locutor é obrigatório.';
+            if (Object.keys(data.announcer).length === 0) {
+                errors.announcer = 'Locutor é obrigatório.';
             }
 
-            if (!data.duracao) {
-                errors.duracao = 'Duração é obrigatória.';
+            if (!data.duration) {
+                errors.duration = 'Duração é obrigatória.';
             }
 
             return errors;
@@ -93,7 +93,7 @@ export default function FormSpot(props) {
             data.id !== undefined ? mutatePut(data) : mutate(data);
             closeModalForm();
             actions.resetForm();
-            msgSucesso(toast, 'Spot salvo com sucesso.');
+            successMsg(toast, 'Spot salvo com sucesso.');
         },
     });
 
@@ -129,13 +129,13 @@ export default function FormSpot(props) {
         formik.resetForm();
 
         formik.setFieldValue('id', spot.id);
-        formik.setFieldValue('titulo', spot.titulo);
-        formik.setFieldValue('empresa', spot.empresa);
-        formik.setFieldValue('locutor', spot.locutor);
-        formik.setFieldValue('data', new Date(spot.data));
-        formik.setFieldValue('duracao', spot.duracao);
-        formik.setFieldValue('contratoAtivo', spot.contratoAtivo);
-        formik.setFieldValue('preco', spot.preco);
+        formik.setFieldValue('title', spot.title);
+        formik.setFieldValue('company', spot.company);
+        formik.setFieldValue('announcer', spot.announcer);
+        formik.setFieldValue('date', new Date(spot.date));
+        formik.setFieldValue('duration', spot.duration);
+        formik.setFieldValue('activeContract', spot.activeContract);
+        formik.setFieldValue('price', spot.price);
         setVisualizarModal(true);
     };
 
@@ -158,35 +158,35 @@ export default function FormSpot(props) {
         </div>
     );
 
-    const completeMethodEmpresa = (ev) => {
-        const filterSuggestions = empresaData.filter(e =>
-            e.nome.toLowerCase().includes(ev.query.toLowerCase())
+    const companyCompleteMethod = (ev) => {
+        const filterSuggestions = companyData.filter(e =>
+            e.name.toLowerCase().includes(ev.query.toLowerCase())
         );
         setEmpresaList(filterSuggestions);
     };
 
-    const completeMethodLocutor = (ev) => {
-        const filterSugestions = locutorData.filter(l => l.nome.toLowerCase().includes(ev.query.toLowerCase()));
+    const announcerCompleteMethod = (ev) => {
+        const filterSugestions = announcerData.filter(l => l.name.toLowerCase().includes(ev.query.toLowerCase()));
 
         setLocutorList(filterSugestions);
     };
 
-    const itemTemplateEmpresa = (item) => {
+    const companyItemTemplate = (item) => {
         return (
             <div className="flex align-items-center">
                 <Avatar icon='pi pi-building' image={item.urlImage}
                     className="mr-2 shadow-4" shape="circle" />
-                <div>{item.nome.toUpperCase()}</div>
+                <div>{item.name.toUpperCase()}</div>
             </div>
         );
     };
 
-    const itemTemplateLocutor = (item) => {
+    const announcerItemTemplate = (item) => {
         return (
             <div className="flex align-items-center">
                 <Avatar icon='pi pi-building' image={item.urlImage}
                     className="mr-2 shadow-4" shape="circle" />
-                <div>{item.nome.toUpperCase()}</div>
+                <div>{item.name.toUpperCase()}</div>
             </div>
         );
     };
@@ -202,96 +202,96 @@ export default function FormSpot(props) {
                 <div className="card p-fluid">
                     <form onSubmit={formik.handleSubmit}>
                         <div className="field">
-                            <label htmlFor='titulo' >Título:</label>
+                            <label htmlFor='title' >Título:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-microphone"></i>
                                 </span>
                                 <InputText
-                                    id="titulo"
-                                    name="titulo"
-                                    value={formik.values.titulo}
+                                    id="title"
+                                    name="title"
+                                    value={formik.values.title}
                                     onChange={formik.handleChange}
-                                    className={isFormFieldValid('titulo') ? "p-invalid uppercase" : "uppercase"}
+                                    className={isFormFieldValid('title') ? "p-invalid uppercase" : "uppercase"}
                                 />
                             </div>
-                            {getFormErrorMessage('titulo')}
+                            {getFormErrorMessage('title')}
                         </div>
 
                         <div className="field">
-                            <label htmlFor='empresa' >Empresa:</label>
+                            <label htmlFor='company' >Empresa:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
-                                    <Avatar icon='pi pi-building' image={formik.values.empresa.urlImage}
+                                    <Avatar icon='pi pi-building' image={formik.values.company.urlImage}
                                         className="shadow-4" shape="circle" />
                                 </span>
-                                <AutoComplete id="empresa" inputId="id" value={formik.values.empresa} suggestions={empresaList} field="nome"
-                                    completeMethod={completeMethodEmpresa} onChange={(e) => formik.setFieldValue('empresa', e.value)}
-                                    itemTemplate={itemTemplateEmpresa} selectedItemTemplate={(empresa) => empresa.nome.toUpperCase()}
+                                <AutoComplete id="company" inputId="id" value={formik.values.company} suggestions={companyList} field="name"
+                                    completeMethod={companyCompleteMethod} onChange={(e) => formik.setFieldValue('company', e.value)}
+                                    itemTemplate={companyItemTemplate} selectedItemTemplate={(company) => company.name.toUpperCase()}
                                     onBlur={formik.handleBlur}
-                                    className={isFormFieldValid('empresa') ? "p-invalid uppercase" : "uppercase"} />
+                                    className={isFormFieldValid('company') ? "p-invalid uppercase" : "uppercase"} />
                             </div>
-                            {getFormErrorMessage('empresa')}
+                            {getFormErrorMessage('company')}
                         </div>
 
                         <div className="field">
-                            <label htmlFor='locutor' >Locutor:</label>
+                            <label htmlFor='announcer' >Locutor:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
-                                    <Avatar icon='pi pi-user' image={formik.values.locutor.urlImage}
+                                    <Avatar icon='pi pi-user' image={formik.values.announcer.urlImage}
                                         className="shadow-4" shape="circle" />
                                 </span>
-                                <AutoComplete id="locutor.id" name="locutor" value={formik.values.locutor} suggestions={locutorList} field="nome"
-                                    completeMethod={completeMethodLocutor} onChange={(e) => formik.setFieldValue('locutor', e.value)}
-                                    itemTemplate={itemTemplateLocutor} selectedItemTemplate={(locutor) => locutor.nome.toUpperCase()}
+                                <AutoComplete id="announcer" name="announcer" value={formik.values.announcer} suggestions={announcerList} field="name"
+                                    completeMethod={announcerCompleteMethod} onChange={(e) => formik.setFieldValue('announcer', e.value)}
+                                    itemTemplate={announcerItemTemplate} selectedItemTemplate={(announcer) => announcer.name.toUpperCase()}
                                     onBlur={formik.handleBlur}
-                                    className={isFormFieldValid('locutor') ? "p-invalid uppercase" : "uppercase"} />
+                                    className={isFormFieldValid('announcer') ? "p-invalid uppercase" : "uppercase"} />
                             </div>
-                            {getFormErrorMessage('locutor')}
+                            {getFormErrorMessage('announcer')}
                         </div>
 
                         <div className="field">
-                            <label htmlFor='data'>Data:</label>
+                            <label htmlFor='date'>Data:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-calendar"></i>
                                 </span>
-                                <Calendar value={formik.values.data} onChange={(e) => formik.setFieldValue('data', e.value)} dateFormat="dd/mm/yy" locale="pt-BR" />
+                                <Calendar id="date" value={formik.values.date} onChange={(e) => formik.setFieldValue('date', e.value)} dateFormat="dd/mm/yy" locale="pt-BR" />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor='duracao'>Duração:</label>
+                            <label htmlFor='duration'>Duração:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-stopwatch"></i>
                                 </span>
                                 <InputMask
-                                    id="duracao"
-                                    name="duracao"
-                                    value={formik.values.duracao}
+                                    id="duration"
+                                    name="duration"
+                                    value={formik.values.duration}
                                     onChange={formik.handleChange}
                                     mask="9.99"
-                                    className={isFormFieldValid('duracao') ? "p-invalid uppercase" : "uppercase"} />
+                                    className={isFormFieldValid('duration') ? "p-invalid uppercase" : "uppercase"} />
                             </div>
-                            {getFormErrorMessage('duracao')}
+                            {getFormErrorMessage('duration')}
                         </div>
 
                         <div className="field">
                             <div className="flex align-items-stretch flex-wrap">
-                                <label htmlFor='duracao'>Contrato Ativo:</label>
-                                <Checkbox onChange={(e) => formik.setFieldValue('contratoAtivo', e.checked)} checked={formik.values.contratoAtivo}
+                                <label htmlFor='duration'>Contrato Ativo:</label>
+                                <Checkbox onChange={(e) => formik.setFieldValue('activeContract', e.checked)} checked={formik.values.activeContract}
                                     className="ml-2" />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor='preco' >Preço:</label>
+                            <label htmlFor='price' >Preço:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-dollar"></i>
                                 </span>
-                                <InputNumber id="preco" value={formik.values.preco} onValueChange={(e) => formik.setFieldValue('preco', e.value)}
+                                <InputNumber id="price" value={formik.values.price} onValueChange={(e) => formik.setFieldValue('price', e.value)}
                                     mode="currency" currency="BRL" locale="pt-BR" disabled />
                             </div>
                         </div>
@@ -300,8 +300,8 @@ export default function FormSpot(props) {
             </Dialog>
 
             <SearchDialog toast={toast} searchVisible={searchVisible} closeSearchDialog={closeSearchDialog} formik={formik}
-                empresaList={empresaList} completeMethodEmpresa={completeMethodEmpresa} locutorList={locutorList}
-                completeMethodLocutor={completeMethodLocutor} />
+                companyList={companyList} companyCompleteMethod={companyCompleteMethod} announcerList={announcerList}
+                announcerCompleteMethod={announcerCompleteMethod} />
         </div>
     )
 }

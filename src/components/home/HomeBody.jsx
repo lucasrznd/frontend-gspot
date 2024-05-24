@@ -1,26 +1,26 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { formatarData, formatarParaUppercase, formatarPreco } from "../../functions/Formatacao";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useSpotData } from "../../hooks/spot/useSpotData";
 import { Avatar } from "primereact/avatar";
+import { dateFormat, priceFormat } from "../../functions/StringFormat";
 
 export default function HomeBody() {
     const toast = useRef(null);
     const { data } = useSpotData();
 
-    const imageBodyEmpresa = (rowData) => {
+    const imageBodyCompany = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <p className='mr-2'>{rowData.empresa.nome.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.empresa.urlImage} className="mr-2 shadow-4" shape="circle" />
+            <p className='mr-2'>{rowData.company.name.toUpperCase()}</p>
+            <Avatar icon="pi pi-building" image={rowData.company.urlImage} className="mr-2 shadow-4" shape="circle" />
         </div>
     };
 
-    const imageBodyLocutor = (rowData) => {
+    const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <p className='mr-2'>{rowData.locutor.nome.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.locutor.urlImage} className="shadow-4" shape="circle" />
+            <p className='mr-2'>{rowData.announcer.name.toUpperCase()}</p>
+            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} className="shadow-4" shape="circle" />
         </div>
     };
 
@@ -52,7 +52,7 @@ export default function HomeBody() {
                             <span className="block text-500 font-medium mb-3 font-bold">Empresas</span>
                         </div>
                         <div className="flex align-items-center justify-content-center bg-orange-400 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                            <a href="/empresa"><i className="pi pi-building text-white text-xl"></i></a>
+                            <a href="/company"><i className="pi pi-building text-white text-xl"></i></a>
                         </div>
                     </div>
                     <div className="flex md:align-items-center align-items-stretch flex-wrap">
@@ -88,12 +88,12 @@ export default function HomeBody() {
                         </div>
                     </div>
                     <DataTable value={data} tableStyle={{ minWidth: '50rem' }} emptyMessage="Nenhum spot encontrado." key="id">
-                        <Column field="titulo" header="Nome" body={(e) => formatarParaUppercase(e, "titulo")} align="center" alignHeader="center"></Column>
-                        <Column field="empresa.nome" header="Empresa" body={(e) => imageBodyEmpresa(e)} align="center" alignHeader="center"></Column>
-                        <Column field="locutor.nome" header="Locutor" body={(e) => imageBodyLocutor(e)} align="center" alignHeader="center"></Column>
-                        <Column field="data" header="Data" body={(e) => formatarData(e, 'data')} align="center" alignHeader="center"></Column>
-                        <Column field="duracao" header="Duração" align="center" alignHeader="center"></Column>
-                        <Column field="preco" header="Preço" body={(e) => formatarPreco(e.preco)} align="center" alignHeader="center"></Column>
+                        <Column field="title" header="Título" body={(rowData) => rowData.title.toUpperCase()} align="center" alignHeader="center"></Column>
+                        <Column field="company.name" header="Empresa" body={(rowData) => imageBodyCompany(rowData)} align="center" alignHeader="center"></Column>
+                        <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
+                        <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
+                        <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
+                        <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
                     </DataTable>
                 </div>
             </div>
