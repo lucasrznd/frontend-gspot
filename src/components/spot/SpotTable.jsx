@@ -20,7 +20,7 @@ export default function SpotTable(props) {
     const [deleteSpotDialog, setDeleteSpotDialog] = useState(false);
     const [globalFilter] = useState(null);
     const toast = useRef(null);
-    const { data, isLoading, isError: isFetchError } = useSpotData();
+    const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useSpotData();
     const { mutate, isSuccess, isError } = useSpotDelete();
 
     const deleteSpot = () => {
@@ -92,6 +92,31 @@ export default function SpotTable(props) {
         setImageVisible(false);
     }
 
+    const showDatatable = () => {
+        if (loadDataSuccess) {
+            <div className="card">
+                <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
+                    paginator globalFilter={globalFilter} header={header}
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                    currentPageReportTemplate="{first} de {last} de {totalRecords} spots"
+                    rows={5} emptyMessage="Nenhum spot encontrado." key="id">
+                    <Column field="id" header="Código" align="center" alignHeader="center"></Column>
+                    <Column field="title" header="Nome" body={(rowData) => rowData.title.toUpperCase()} align="center" alignHeader="center"></Column>
+                    <Column field="company.name" header="Empresa" body={(rowData) => imageBodyEmpresa(rowData)} align="center" alignHeader="center"></Column>
+                    <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
+                    <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
+                    <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
+                    <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
+                    <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
+                </DataTable>
+            </div>
+        }
+        return <div className='flex align-items-center justify-content-center'>
+            <i className="pi pi-exclamation-circle mr-2 text-red-500"></i>
+            <h2 className='text-red-500'>Erro de conexão com servidor.</h2>
+        </div>
+    }
+
     return (
         <div>
             <Toast ref={toast} />
@@ -101,22 +126,7 @@ export default function SpotTable(props) {
                 {isLoading && <ProgressSpinner />}
                 {isFetchError && errorMsg(toast, 'Erro ao carregar spots.')}
 
-                <div className="card">
-                    <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
-                        paginator globalFilter={globalFilter} header={header}
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="{first} de {last} de {totalRecords} spots"
-                        rows={5} emptyMessage="Nenhum spot encontrado." key="id">
-                        <Column field="id" header="Código" align="center" alignHeader="center"></Column>
-                        <Column field="title" header="Nome" body={(rowData) => rowData.title.toUpperCase()} align="center" alignHeader="center"></Column>
-                        <Column field="company.name" header="Empresa" body={(rowData) => imageBodyEmpresa(rowData)} align="center" alignHeader="center"></Column>
-                        <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
-                        <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
-                        <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
-                        <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
-                        <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
-                    </DataTable>
-                </div>
+                {showDatatable()}
             </Panel>
 
             <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Spot" src={spot.urlImage} />

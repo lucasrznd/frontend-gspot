@@ -24,7 +24,7 @@ export default function CompanyTable(props) {
     const [deleteCompanyDialog, setDeleteEmpresaDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
-    const { data, isLoading, isError: isFetchError } = useCompanyData();
+    const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useCompanyData();
     const { mutate, isSuccess, isError } = useCompanyDelete();
 
     const deleteCompany = () => {
@@ -71,12 +71,7 @@ export default function CompanyTable(props) {
     };
 
     const imageBody = (rowData) => {
-        // if (rowData.image === '') {
-        //     rowData.image = 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png';
-        // }
-
         return <>
-            {/* <img src={rowData.image} alt="Imagem do Empresa" onClick={(e) => openTableImageDialog(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
             <Avatar icon="pi pi-building" image={rowData.urlImage} onClick={(e) => openTableImageDialog(e.target.currentSrc)} size="xlarge" className="mr-2 shadow-4" shape="circle" />
         </>
     };
@@ -97,6 +92,28 @@ export default function CompanyTable(props) {
         setImageVisible(false);
     }
 
+    const showDatatable = () => {
+        if (loadDataSuccess) {
+            return <div className="card">
+                <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
+                    paginator globalFilter={globalFilter} header={header}
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                    currentPageReportTemplate="{first} de {last} de {totalRecords} empresas"
+                    rows={5} emptyMessage="Nenhum empresa encontrado." key="id">
+                    <Column field="id" header="Código" align="center" alignHeader="center"></Column>
+                    <Column field="name" body={(rowData) => rowData.name.toUpperCase()} header="Nome" align="center" alignHeader="center"></Column>
+                    <Column field="phoneNumber" body={(rowData) => formatPhoneNumber(rowData, 'phoneNumber')} header="Telefone" align="center" alignHeader="center"></Column>
+                    <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
+                    <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
+                </DataTable>
+            </div>
+        }
+        return <div className='flex align-items-center justify-content-center'>
+            <i className="pi pi-exclamation-circle mr-2 text-red-500"></i>
+            <h2 className='text-red-500'>Erro de conexão com servidor.</h2>
+        </div>
+    }
+
     return (
         <div>
             <Toast ref={toast} />
@@ -104,21 +121,9 @@ export default function CompanyTable(props) {
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
 
                 {isLoading && <ProgressSpinner />}
-                {isFetchError && errorMsg(toast, 'Erro ao carregar empresas.')}
+                {isFetchError && errorMsg(toast, 'Erro de conexão com servidor.')}
 
-                <div className="card">
-                    <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
-                        paginator globalFilter={globalFilter} header={header}
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="{first} de {last} de {totalRecords} empresas"
-                        rows={5} emptyMessage="Nenhum empresa encontrado." key="id">
-                        <Column field="id" header="Código" align="center" alignHeader="center"></Column>
-                        <Column field="name" body={(rowData) => rowData.name.toUpperCase()} header="Nome" align="center" alignHeader="center"></Column>
-                        <Column field="phoneNumber" body={(rowData) => formatPhoneNumber(rowData, 'phoneNumber')} header="Telefone" align="center" alignHeader="center"></Column>
-                        <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
-                        <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
-                    </DataTable>
-                </div>
+                {showDatatable()}
             </Panel>
 
             <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Empresa" src={company.urlImage} />
