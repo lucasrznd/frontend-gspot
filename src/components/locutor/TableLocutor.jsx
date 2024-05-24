@@ -8,7 +8,7 @@ import { InputText } from 'primereact/inputtext';
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
 import DeleteDialog from '../DeleteDialog';
-import { formatarParaUppercase, formatarTelefone } from '../../functions/Formatacao';
+import { formatarTelefone } from '../../functions/Formatacao';
 import { useLocutorDelete } from '../../hooks/locutor/useLocutorDelete';
 import { msgAviso, msgErro } from '../../functions/Mensagens';
 import { Toast } from 'primereact/toast';
@@ -19,16 +19,16 @@ import { useLocutorData } from '../../hooks/locutor/useLocutorData';
 import ImageDialog from '../ImageDialog';
 
 export default function TableLocutor(props) {
-    const [locutor, setLocutor] = useState({});
+    const [announcer, setAnnouncer] = useState({});
     const [imageVisible, setImageVisible] = useState(false);
-    const [deleteLocutorDialog, setDeleteLocutorDialog] = useState(false);
+    const [deleteAnnouncerDialog, setDeleteAnnouncer] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
-    const { data, isLoading, isError: isFetchError } = useLocutorData();
+    const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useLocutorData();
     const { mutate, isSuccess, isError } = useLocutorDelete();
 
-    const deleteLocutor = () => {
-        mutate(locutor.id);
+    const deleteAnnouncer = () => {
+        mutate(announcer.id);
 
         if (isError) {
             msgErro(toast, 'Erro ao remover locutor.');
@@ -41,13 +41,13 @@ export default function TableLocutor(props) {
         closeModal();
     }, [isSuccess]);
 
-    const confirmDeleteLocutor = (locutor) => {
-        setLocutor({ ...locutor });
-        setDeleteLocutorDialog(true);
+    const confirmDeleteAnnouncer = (announcer) => {
+        setAnnouncer({ ...announcer });
+        setDeleteAnnouncer(true);
     };
 
     const closeModal = () => {
-        setDeleteLocutorDialog(false);
+        setDeleteAnnouncer(false);
     };
 
     const header = (
@@ -63,9 +63,9 @@ export default function TableLocutor(props) {
     const tableActions = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" rounded onClick={() => props.locutorDetails(rowData)} />
+                <Button icon="pi pi-pencil" rounded onClick={() => props.announcerDetails(rowData)} />
                 <span style={{ marginBottom: "1rem", marginLeft: "5px", marginRight: "5px" }} className="pi pi-ellipsis-v"></span>
-                <Button icon="pi pi-trash" rounded severity="danger" onClick={() => confirmDeleteLocutor(rowData)} />
+                <Button icon="pi pi-trash" rounded severity="danger" onClick={() => confirmDeleteAnnouncer(rowData)} />
             </React.Fragment>
         );
     };
@@ -89,7 +89,7 @@ export default function TableLocutor(props) {
     }
 
     const openTableImageDialog = (rowData) => {
-        setLocutor({ ...locutor, urlImage: rowData });
+        setAnnouncer({ ...announcer, urlImage: rowData });
         rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
     }
 
@@ -97,34 +97,41 @@ export default function TableLocutor(props) {
         setImageVisible(false);
     }
 
+    const showDatatable = () => {
+        if (loadDataSuccess) {
+            return <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
+                paginator globalFilter={globalFilter} header={header}
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="{first} de {last} de {totalRecords} locutores"
+                rows={5} emptyMessage="Nenhum locutor encontrado." key="id">
+                <Column field="id" header="Código" align="center" alignHeader="center"></Column>
+                <Column field="name" body={(rowData) => rowData.name.toUpperCase()} header="Nome" align="center" alignHeader="center"></Column>
+                <Column field="phoneNumber" body={(rowData) => formatarTelefone(rowData, "phoneNumber")} header="Telefone" align="center" alignHeader="center"></Column>
+                <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
+                <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
+            </DataTable>
+        }
+        return <div className='flex align-items-center justify-content-center'>
+            <i className="pi pi-exclamation-circle mr-2 text-red-500"></i>
+            <h2 className='text-red-500'>Erro de conexão com servidor.</h2>
+        </div>
+    }
+
     return (
         <div>
             <Toast ref={toast} />
             <Panel>
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
-
                 {isLoading && <ProgressSpinner />}
-                {isFetchError && msgErro(toast, 'Erro ao carregar locutores.')}
+                {isFetchError && msgErro(toast, 'Erro de conexão com servidor.')}
 
-                <div className="card">
-                    <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
-                        paginator globalFilter={globalFilter} header={header}
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="{first} de {last} de {totalRecords} locutores"
-                        rows={5} emptyMessage="Nenhum locutor encontrado." key="id">
-                        <Column field="id" header="Código" align="center" alignHeader="center"></Column>
-                        <Column field="nome" body={(rowData) => formatarParaUppercase(rowData, "nome")} header="Nome" align="center" alignHeader="center"></Column>
-                        <Column field="telefone" body={(rowData) => formatarTelefone(rowData)} header="Telefone" align="center" alignHeader="center"></Column>
-                        <Column field="urlImage" body={imageBody} header={imageTableHeader} align="center" alignHeader="center"></Column>
-                        <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
-                    </DataTable>
-                </div>
+                {showDatatable()}
             </Panel>
 
-            <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem do Locutor" src={locutor.urlImage} />
+            <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem do Locutor" src={announcer.urlImage} />
 
-            <DeleteDialog deleteObjectDialog={deleteLocutorDialog} hideDeleteDialog={closeModal} deleteObject={deleteLocutor}
-                hideDeleteObjectDialog={closeModal} object={locutor} />
+            <DeleteDialog deleteObjectDialog={deleteAnnouncerDialog} hideDeleteDialog={closeModal} deleteObject={deleteAnnouncer}
+                hideDeleteObjectDialog={closeModal} object={announcer} />
         </div>
     )
 

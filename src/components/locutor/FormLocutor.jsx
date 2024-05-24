@@ -22,14 +22,14 @@ export default function FormLocutor(props) {
     const { mutate: mutatePut } = useLocutorPut();
 
     const validationSchema = Yup.object().shape({
-        nome: Yup.string().required('Nome é obrigatório'),
+        name: Yup.string().required('Nome é obrigatório'),
     });
 
     const formik = useFormik({
         initialValues: {
             id: undefined,
-            nome: '', // Initial value of "nome" field
-            telefone: '', // Initial value of "telefone" field
+            name: '', // Initial value of "name" field
+            phoneNumber: '', // Initial value of "phoneNumber" field
             urlImage: ''
         },
         validationSchema: validationSchema, // Validation Schema
@@ -61,11 +61,11 @@ export default function FormLocutor(props) {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    function newLocutor() {
+    function newAnnouncer() {
         formik.resetForm();
         formik.values.id = undefined;
-        formik.values.nome = '';
-        formik.values.telefone = '';
+        formik.values.name = '';
+        formik.values.phoneNumber = '';
         formik.values.urlImage = '';
         setVisualizarModal(true);
     }
@@ -74,12 +74,12 @@ export default function FormLocutor(props) {
         setVisualizarModal(false);
     }
 
-    const locutorDetails = (locutor) => {
+    const announcerDetails = (announcer) => {
         formik.resetForm();
-        formik.values.id = locutor.id;
-        formik.values.nome = locutor.nome;
-        formik.values.telefone = locutor.telefone;
-        formik.values.urlImage = locutor.urlImage;
+        formik.values.id = announcer.id;
+        formik.values.name = announcer.name;
+        formik.values.phoneNumber = announcer.phoneNumber;
+        formik.values.urlImage = announcer.urlImage;
         setVisualizarModal(true);
     };
 
@@ -89,7 +89,7 @@ export default function FormLocutor(props) {
 
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-plus-circle" label='Novo' onClick={newLocutor} />
+            <Button icon="pi pi-plus-circle" label='Novo' onClick={newAnnouncer} />
         </React.Fragment>
     );
 
@@ -112,7 +112,7 @@ export default function FormLocutor(props) {
         <div>
             <Toast ref={toast} />
 
-            <TableLocutor startContent={startContent} locutorDetails={locutorDetails} setLocutor={props.setLocutor} />
+            <TableLocutor startContent={startContent} announcerDetails={announcerDetails} setLocutor={props.setLocutor} />
 
             <Dialog header="Detalhes do Locutor" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>
@@ -125,32 +125,32 @@ export default function FormLocutor(props) {
                         </div>
 
                         <div className="field">
-                            <label htmlFor='nome' style={{ marginBottom: '0.5rem' }}>Nome:</label>
+                            <label htmlFor='name' style={{ marginBottom: '0.5rem' }}>Nome:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-user"></i>
                                 </span>
                                 <InputText
-                                    id="nome"
-                                    name="nome"
-                                    value={formik.values.nome}
+                                    id="name"
+                                    name="name"
+                                    value={formik.values.name}
                                     onChange={formik.handleChange}
-                                    className={isFormFieldValid('nome') ? "p-invalid uppercase" : "uppercase"}
+                                    className={isFormFieldValid('name') ? "p-invalid uppercase" : "uppercase"}
                                 />
                             </div>
-                            {getFormErrorMessage('nome')}
+                            {getFormErrorMessage('name')}
                         </div>
 
                         <div className="field">
-                            <label htmlFor='telefone' style={{ marginBottom: '0.5rem' }}>Telefone:</label>
+                            <label htmlFor='phoneNumber' style={{ marginBottom: '0.5rem' }}>Telefone:</label>
                             <div className="p-inputgroup flex-1">
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-phone"></i>
                                 </span>
                                 <InputMask
-                                    id="telefone"
-                                    name="telefone"
-                                    value={formik.values.telefone}
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    value={formik.values.phoneNumber}
                                     onChange={formik.handleChange}
                                     mask="(99) 9 9999-9999"
                                     placeholder="(99) 9 9999-9999"
