@@ -18,7 +18,6 @@ import SearchDialog from "./SearchDialog";
 import { Avatar } from "primereact/avatar";
 import { useCompanyData } from "../../hooks/company/useCompanyData";
 import { useAnnouncerData } from "../../hooks/announcer/useAnnouncerData";
-import SpotTable from "./SpotTable";
 
 export default function SpotForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
