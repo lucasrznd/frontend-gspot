@@ -26,9 +26,17 @@ export default function HomeBody() {
         </div>
     };
 
-    const showDatatable = () => {
+    const showBody = () => {
+        if (isLoading) {
+            return <ProgressSpinner />
+        }
+
+        if (isError) {
+            errorMsg(toast, 'Erro de conexão com servidor.');
+        }
+
         if (loadDataSuccess) {
-            <div>
+            return <div>
                 <div className="grid mt-1">
                     <div className="col-12 md:col-6 lg:col-3">
                         <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
@@ -110,10 +118,6 @@ export default function HomeBody() {
     return <div>
         <Toast ref={toast} />
 
-
-
-        {isLoading && <ProgressSpinner />}
-        {isError && errorMsg(toast, 'Erro de conexão com servidor.')}
-        {showDatatable()}
+        {showBody()}
     </div>
 }

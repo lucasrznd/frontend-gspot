@@ -93,8 +93,16 @@ export default function SpotTable(props) {
     }
 
     const showDatatable = () => {
-        if (loadDataSuccess) {
-            <div className="card">
+        if (isLoading) {
+            return <ProgressSpinner />
+        }
+
+        if (isFetchError) {
+            errorMsg(toast, 'Erro de conexão com o servidor.');
+        }
+
+        if (loadDataSuccess && Array.isArray(data)) {
+            return <div className="card">
                 <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
                     paginator globalFilter={globalFilter} header={header}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -122,9 +130,6 @@ export default function SpotTable(props) {
             <Toast ref={toast} />
             <Panel>
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
-
-                {isLoading && <ProgressSpinner />}
-                {isFetchError && errorMsg(toast, 'Erro ao carregar spots.')}
 
                 {showDatatable()}
             </Panel>

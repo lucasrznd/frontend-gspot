@@ -98,7 +98,15 @@ export default function AnnouncerTable(props) {
     }
 
     const showDatatable = () => {
-        if (loadDataSuccess) {
+        if (isLoading) {
+            return <ProgressSpinner />;
+        }
+
+        if (isFetchError) {
+            errorMsg(toast, 'Erro de conexão com servidor.');
+        }
+
+        if (loadDataSuccess && Array.isArray(data)) {
             return <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
                 paginator globalFilter={globalFilter} header={header}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -122,8 +130,6 @@ export default function AnnouncerTable(props) {
             <Toast ref={toast} />
             <Panel>
                 <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
-                {isLoading && <ProgressSpinner />}
-                {isFetchError && errorMsg(toast, 'Erro de conexão com servidor.')}
 
                 {showDatatable()}
             </Panel>
