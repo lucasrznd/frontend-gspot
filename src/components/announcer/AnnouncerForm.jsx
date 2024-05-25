@@ -45,14 +45,14 @@ export default function AnnouncerForm(props) {
 
             // If id != null is made a PUT Request, else a POST Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
-            closeModalForm();
+            closeDialogForm();
             actions.resetForm();
             successMsg(toast, 'Locutor salvo com sucesso.');
         },
     });
 
     useEffect(() => {
-        closeModalForm();
+        closeDialogForm();
     }, [isSuccess]);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -70,7 +70,7 @@ export default function AnnouncerForm(props) {
         setVisualizarModal(true);
     }
 
-    const closeModalForm = () => {
+    const closeDialogForm = () => {
         setVisualizarModal(false);
     }
 
@@ -83,7 +83,7 @@ export default function AnnouncerForm(props) {
         setVisualizarModal(true);
     };
 
-    const closeModal = () => {
+    const closeDialog = () => {
         setVisualizarModal(false);
     }
 
@@ -96,7 +96,7 @@ export default function AnnouncerForm(props) {
     const modalFooter = (
         <div>
             <Button label="Salvar" type="submit" icon="pi pi-check" onClick={formik.handleSubmit} autoFocus />
-            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeModal} />
+            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeDialog} />
         </div>
     );
 
@@ -112,7 +112,7 @@ export default function AnnouncerForm(props) {
         <div>
             <Toast ref={toast} />
 
-            <AnnouncerTable startContent={startContent} announcerDetails={announcerDetails} setLocutor={props.setLocutor} />
+            <AnnouncerTable startContent={startContent} announcerDetails={announcerDetails} />
 
             <Dialog header="Detalhes do Locutor" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>

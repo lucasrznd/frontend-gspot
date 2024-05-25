@@ -47,14 +47,14 @@ export default function CompanyForm(props) {
 
             // If id != null is made a POST Request, else a PUT Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
-            closeModalForm();
+            closeDialogForm();
             actions.resetForm();
             successMsg(toast, 'Empresa salva com sucesso.');
         },
     });
 
     useEffect(() => {
-        closeModalForm();
+        closeDialogForm();
     }, [isSuccess]);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -63,7 +63,7 @@ export default function CompanyForm(props) {
         return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
     };
 
-    function newEmpresa() {
+    function newCompany() {
         formik.resetForm();
         formik.values.id = undefined;
         formik.values.name = '';
@@ -72,11 +72,11 @@ export default function CompanyForm(props) {
         setVisualizarModal(true);
     }
 
-    const closeModalForm = () => {
+    const closeDialogForm = () => {
         setVisualizarModal(false);
     }
 
-    const empresaDetails = (empresa) => {
+    const companyDetails = (empresa) => {
         formik.resetForm();
         formik.values.id = empresa.id;
         formik.values.name = empresa.name;
@@ -85,20 +85,20 @@ export default function CompanyForm(props) {
         setVisualizarModal(true);
     };
 
-    const closeModal = () => {
+    const closeDialog = () => {
         setVisualizarModal(false);
     }
 
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-plus-circle" label='Novo' onClick={newEmpresa} />
+            <Button icon="pi pi-plus-circle" label='Novo' onClick={newCompany} />
         </React.Fragment>
     );
 
     const modalFooter = (
         <div>
             <Button label="Salvar" type="submit" icon="pi pi-check" onClick={formik.handleSubmit} autoFocus />
-            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeModal} />
+            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeDialog} />
         </div>
     );
 
@@ -114,7 +114,7 @@ export default function CompanyForm(props) {
         <div>
             <Toast ref={toast} />
 
-            <TableEmpresa startContent={startContent} empresaDetails={empresaDetails} setEmpresa={props.setEmpresa} />
+            <TableEmpresa startContent={startContent} companyDetails={companyDetails} setEmpresa={props.setEmpresa} />
 
             <Dialog header="Detalhes do Empresa" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>

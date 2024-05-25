@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { successMsg } from "../../functions/Messages";
 import { useFormik } from 'formik';
-import TableSpot from "./SpotTable";
+import SpotTable from "./SpotTable";
 import { AutoComplete } from "primereact/autocomplete";
 import { useSpotMutate } from "../../hooks/spot/useSpotMutate";
 import { useSpotPut } from "../../hooks/spot/useSpotPut";
@@ -18,6 +18,7 @@ import SearchDialog from "./SearchDialog";
 import { Avatar } from "primereact/avatar";
 import { useCompanyData } from "../../hooks/company/useCompanyData";
 import { useAnnouncerData } from "../../hooks/announcer/useAnnouncerData";
+import SpotTable from "./SpotTable";
 
 export default function SpotForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
@@ -91,14 +92,14 @@ export default function SpotForm(props) {
 
             // If id != null is made a POST Request, else a PUT Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
-            closeModalForm();
+            closeDialogForm();
             actions.resetForm();
             successMsg(toast, 'Spot salvo com sucesso.');
         },
     });
 
     useEffect(() => {
-        closeModalForm();
+        closeDialogForm();
     }, [isSuccess]);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
@@ -121,7 +122,7 @@ export default function SpotForm(props) {
         setSearchVisible(false);
     }
 
-    const closeModalForm = () => {
+    const closeDialogForm = () => {
         setVisualizarModal(false);
     }
 
@@ -139,7 +140,7 @@ export default function SpotForm(props) {
         setVisualizarModal(true);
     };
 
-    const closeModal = () => {
+    const closeDialog = () => {
         setVisualizarModal(false);
     }
 
@@ -154,7 +155,7 @@ export default function SpotForm(props) {
     const modalFooter = (
         <div>
             <Button label="Salvar" type="submit" icon="pi pi-check" onClick={formik.handleSubmit} autoFocus />
-            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeModal} />
+            <Button label="Cancelar" icon="pi pi-times" outlined onClick={closeDialog} />
         </div>
     );
 
@@ -195,7 +196,7 @@ export default function SpotForm(props) {
         <div>
             <Toast ref={toast} />
 
-            <TableSpot startContent={startContent} spotDetails={spotDetails} setEmpresa={props.setEmpresa} />
+            <SpotTable startContent={startContent} spotDetails={spotDetails} setEmpresa={props.setEmpresa} />
 
             <Dialog header="Detalhes do Spot" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>
