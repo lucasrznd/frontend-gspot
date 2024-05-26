@@ -13,6 +13,8 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { useSpotData } from '../../hooks/spot/useSpotData';
 import ImageDialog from '../dialog/ImageDialog';
 import { dateFormat, priceFormat } from '../../functions/StringFormat';
+import { exportPdf } from '../../functions/ExportPDF';
+import { exportExcel } from '../../functions/ExportSheet';
 
 export default function SpotTable(props) {
     const [spot, setSpot] = useState({});
@@ -125,11 +127,27 @@ export default function SpotTable(props) {
         </div>
     }
 
+    const rightToolbarTemplate = () => {
+        return <>
+            <Button type="button" icon="pi pi-file-pdf" severity="warning" rounded onClick={exportPdfFile} data-pr-tooltip="PDF" />
+            <span className="pi pi-ellipsis-v ml-2 mr-2"></span>
+            <Button type="button" icon="pi pi-file-excel" severity="success" rounded onClick={exportExcelFile} data-pr-tooltip="XLS" />
+        </>
+    };
+
+    const exportExcelFile = () => {
+        exportExcel(data);
+    }
+
+    const exportPdfFile = () => {
+        exportPdf(data);
+    };
+
     return (
         <div>
             <Toast ref={toast} />
             <Panel>
-                <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} />
+                <Toolbar style={{ marginBottom: "10px" }} start={props.startContent} end={rightToolbarTemplate} />
 
                 {showDatatable()}
             </Panel>
