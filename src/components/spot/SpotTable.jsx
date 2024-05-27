@@ -110,7 +110,7 @@ export default function SpotTable(props) {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="{first} de {last} de {totalRecords} spots"
                     rows={5} emptyMessage="Nenhum spot encontrado." key="id">
-                    <Column field="id" header="Código" align="center" alignHeader="center"></Column>
+                    <Column field="id" header="Código" sortable align="center" alignHeader="center"></Column>
                     <Column field="title" header="Nome" body={(rowData) => rowData.title.toUpperCase()} align="center" alignHeader="center"></Column>
                     <Column field="company.name" header="Empresa" body={(rowData) => imageBodyEmpresa(rowData)} align="center" alignHeader="center"></Column>
                     <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
