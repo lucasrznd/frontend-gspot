@@ -62,7 +62,7 @@ export default function HomeBody() {
                                     <span className="block text-500 font-medium mb-3 font-bold">Empresas</span>
                                 </div>
                                 <div className="flex align-items-center justify-content-center bg-orange-400 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
-                                    <a href="/company"><i className="pi pi-building text-white text-xl"></i></a>
+                                    <a href="/empresa"><i className="pi pi-building text-white text-xl"></i></a>
                                 </div>
                             </div>
                             <div className="flex md:align-items-center align-items-stretch flex-wrap">
