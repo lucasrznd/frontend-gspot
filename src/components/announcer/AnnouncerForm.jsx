@@ -13,12 +13,13 @@ import { isImgUrl } from "../../functions/Validation";
 import AnnouncerTable from "./AnnouncerTable";
 import { useAnnouncerMutate } from "../../hooks/announcer/useAnnouncerMutate";
 import { useAnnouncerPut } from "../../hooks/announcer/useAnnouncerPut";
+import { clearNumber } from "../../functions/StringFormat";
 
 export default function AnnouncerForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
     const [imageVisible, setImageVisible] = useState(false);
     const toast = useRef(null);
-    const { mutate, isSuccess } = useAnnouncerMutate();
+    const { mutate, isSuccess, error } = useAnnouncerMutate();
     const { mutate: mutatePut } = useAnnouncerPut();
 
     const validationSchema = Yup.object().shape({
@@ -35,6 +36,7 @@ export default function AnnouncerForm(props) {
         validationSchema: validationSchema, // Validation Schema
         onSubmit: async (values, actions) => {
             const data = values;
+            data.phoneNumber = clearNumber(data.phoneNumber);
 
             if (data.urlImage !== '') {
                 if (await isImgUrl(data.urlImage) === false) {
@@ -45,6 +47,13 @@ export default function AnnouncerForm(props) {
 
             // If id != null is made a PUT Request, else a POST Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
+
+            console.log(error)
+            if (error && error.message === '409') {
+                errorMsg(toast, 'Locutor já existente.');
+                return;
+            }
+
             closeDialogForm();
             actions.resetForm();
             successMsg(toast, 'Locutor salvo com sucesso.');
