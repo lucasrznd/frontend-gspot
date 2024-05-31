@@ -19,7 +19,7 @@ export default function CompanyForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
     const [imageVisible, setImageVisible] = useState(false);
     const toast = useRef(null);
-    const { mutate, isSuccess } = useCompanyMutate();
+    const { mutate, isSuccess, error } = useCompanyMutate();
     const { mutate: mutatePut } = useCompanyPut();
 
     const validationSchema = Yup.object().shape({
@@ -47,6 +47,12 @@ export default function CompanyForm(props) {
 
             // If id != null is made a POST Request, else a PUT Request
             data.id !== undefined ? mutatePut(data) : mutate(data);
+
+            if (error && error.message === '409') {
+                errorMsg(toast, 'Empresa já existente.');
+                return;
+            }
+
             closeDialogForm();
             actions.resetForm();
             successMsg(toast, 'Empresa salva com sucesso.');
