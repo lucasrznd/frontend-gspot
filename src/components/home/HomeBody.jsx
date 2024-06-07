@@ -7,10 +7,16 @@ import { Avatar } from "primereact/avatar";
 import { dateFormat, priceFormat } from "../../functions/StringFormat";
 import { errorMsg } from "../../functions/Messages";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useSpotCounter } from "../../hooks/spot/useSpotCounter";
+import { useCompanyCounter } from "../../hooks/company/useCompanyCounter";
+import { useSpotAmountRaised } from "../../hooks/spot/useSpotAmountRaised";
 
 export default function HomeBody() {
     const toast = useRef(null);
     const { data, isError, isLoading, isSuccess: loadDataSuccess } = useSpotData();
+    const { data: spotCounter } = useSpotCounter();
+    const { data: companyCounter } = useCompanyCounter();
+    const { data: spotAmountRaised } = useSpotAmountRaised();
 
     const imageBodyCompany = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
@@ -49,7 +55,7 @@ export default function HomeBody() {
                                 </div>
                             </div>
                             <div className="flex md:align-items-center align-items-stretch flex-wrap">
-                                <span className="text-green-500 text-900 font-medium text-xl flex align-items-center justify-content-center">2  </span>
+                                <span className="text-green-500 text-900 font-medium text-xl flex align-items-center justify-content-center">{spotCounter}</span>
                                 <span className="text-500 flex align-items-center justify-content-center ml-2">registrados.</span>
                             </div>
                         </div>
@@ -66,7 +72,7 @@ export default function HomeBody() {
                                 </div>
                             </div>
                             <div className="flex md:align-items-center align-items-stretch flex-wrap">
-                                <span className="text-green-500 text-900 font-medium text-xl flex align-items-center justify-content-center">2  </span>
+                                <span className="text-green-500 text-900 font-medium text-xl flex align-items-center justify-content-center">{companyCounter}</span>
                                 <span className="text-500 flex align-items-center justify-content-center ml-2">registradas.</span>
                             </div>
                         </div>
@@ -83,7 +89,7 @@ export default function HomeBody() {
                                 </div>
                             </div>
                             <div className="flex md:align-items-center align-items-stretch flex-wrap">
-                                <span className="text-600 font-bold text-xl flex align-items-center justify-content-center">R$ 1700,00</span>
+                                <span className="text-600 font-bold text-xl flex align-items-center justify-content-center">{priceFormat(spotAmountRaised)}</span>
                             </div>
                         </div>
                     </div>
