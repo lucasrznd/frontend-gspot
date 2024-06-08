@@ -20,15 +20,15 @@ export default function HomeBody() {
 
     const imageBodyCompany = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <p className='mr-2'>{rowData.company.name.toUpperCase()}</p>
             <Avatar icon="pi pi-building" image={rowData.company.urlImage} className="mr-2 shadow-4" shape="circle" />
+            <p>{rowData.company.name.toUpperCase()}</p>
         </div>
     };
 
     const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <p className='mr-2'>{rowData.announcer.name.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} className="shadow-4" shape="circle" />
+            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} className="mr-2 shadow-4" shape="circle" />
+            <p>{rowData.announcer.name.toUpperCase()}</p>
         </div>
     };
 
@@ -108,7 +108,7 @@ export default function HomeBody() {
                                 <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
                                 <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
                                 <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
-                                <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
+                                <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} className="font-bold" align="center" alignHeader="center"></Column>
                             </DataTable>
                         </div>
                     </div>
