@@ -2,7 +2,6 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Toast } from "primereact/toast";
 import { useRef } from "react";
-import { useSpotData } from "../../hooks/spot/useSpotData";
 import { Avatar } from "primereact/avatar";
 import { dateFormat, priceFormat } from "../../functions/StringFormat";
 import { errorMsg } from "../../functions/Messages";
@@ -10,10 +9,11 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useSpotCounter } from "../../hooks/spot/useSpotCounter";
 import { useCompanyCounter } from "../../hooks/company/useCompanyCounter";
 import { useSpotAmountRaised } from "../../hooks/spot/useSpotAmountRaised";
+import { useSpotLatest } from "../../hooks/spot/useSpotLatest";
 
 export default function HomeBody() {
     const toast = useRef(null);
-    const { data, isError, isLoading, isSuccess: loadDataSuccess } = useSpotData();
+    const { data, isError, isLoading, isSuccess: loadDataSuccess } = useSpotLatest();
     const { data: spotCounter } = useSpotCounter();
     const { data: companyCounter } = useCompanyCounter();
     const { data: spotAmountRaised } = useSpotAmountRaised();
