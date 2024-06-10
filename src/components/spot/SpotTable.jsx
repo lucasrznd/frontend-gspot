@@ -66,17 +66,15 @@ export default function SpotTable(props) {
 
     const imageBodyEmpresa = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-            <p className='mr-2'>{rowData.company.name.toUpperCase()}</p>
             <Avatar icon="pi pi-building" image={rowData.company.urlImage} onClick={(e) => openImgDialogCompany(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
+            <p>{rowData.company.name.toUpperCase()}</p>
         </div>
     };
 
     const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            {/* <img src={rowData.image} alt="Imagem do Spot" onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className='shadow-4 cursor-pointer border-circle' width='80px' height='80px' /> */}
-            <p className='mr-2'>{rowData.announcer.name.toUpperCase()}</p>
-            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="shadow-4" shape="circle" />
+            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
+            <p>{rowData.announcer.name.toUpperCase()}</p>
         </div>
     };
 
@@ -115,8 +113,8 @@ export default function SpotTable(props) {
                     <Column field="company.name" header="Empresa" body={(rowData) => imageBodyEmpresa(rowData)} align="center" alignHeader="center"></Column>
                     <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
                     <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
-                    <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
-                    <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} align="center" alignHeader="center"></Column>
+                    <Column field="duration" header="Duração" body={(rowData) => Number(rowData.duration).toFixed(2)} align="center" alignHeader="center"></Column>
+                    <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} className='font-bold' align="center" alignHeader="center"></Column>
                     <Column body={tableActions} exportable={false} style={{ minWidth: '12rem' }} align="center" header="Ações" alignHeader="center"></Column>
                 </DataTable>
             </div>
