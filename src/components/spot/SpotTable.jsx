@@ -15,6 +15,7 @@ import ImageDialog from '../dialog/ImageDialog';
 import { dateFormat, priceFormat } from '../../functions/StringFormat';
 import { exportPdf } from '../../functions/ExportPDF';
 import { exportExcel } from '../../functions/ExportSheet';
+import SearchDialog from './SearchDialog';
 
 export default function SpotTable(props) {
     const [spot, setSpot] = useState({});
@@ -156,6 +157,10 @@ export default function SpotTable(props) {
             </Panel>
 
             <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Spot" src={spot.urlImage} />
+
+            <SearchDialog toast={props.toast} searchVisible={props.searchVisible} closeSearchDialog={props.closeSearchDialog} formik={props.formik}
+                companyList={props.companyList} companyCompleteMethod={props.companyCompleteMethod} announcerList={props.announcerList}
+                announcerCompleteMethod={props.announcerCompleteMethod} setSpotList={setSpotList} />
 
             <DeleteDialog deleteObjectDialog={deleteSpotDialog} hideDeleteDialog={closeModal} deleteObject={deleteSpot}
                 hideDeleteObjectDialog={closeModal} object={spot} />
