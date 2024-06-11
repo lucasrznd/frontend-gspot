@@ -23,6 +23,7 @@ export default function SpotTable(props) {
     const [globalFilter] = useState(null);
     const toast = useRef(null);
     const { data, isLoading, isError: isFetchError, isSuccess: loadDataSuccess } = useSpotData();
+    const [spotList, setSpotList] = useState({});
     const { mutate, isSuccess, isError } = useSpotDelete();
 
     const deleteSpot = () => {
@@ -38,6 +39,10 @@ export default function SpotTable(props) {
     useEffect(() => {
         closeModal();
     }, [isSuccess]);
+
+    useEffect(() => {
+        setSpotList(data);
+    }, [data]);
 
     const confirmDeleteSpot = (spot) => {
         setSpot({ ...spot });
@@ -101,9 +106,9 @@ export default function SpotTable(props) {
             errorMsg(toast, 'Erro de conexão com o servidor.');
         }
 
-        if (loadDataSuccess && Array.isArray(data)) {
+        if (loadDataSuccess && Array.isArray(spotList)) {
             return <div className="card">
-                <DataTable value={data} tableStyle={{ minWidth: '50rem' }}
+                <DataTable value={spotList} tableStyle={{ minWidth: '50rem' }}
                     paginator globalFilter={globalFilter} header={header}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="{first} de {last} de {totalRecords} spots"
@@ -134,11 +139,11 @@ export default function SpotTable(props) {
     };
 
     const exportExcelFile = () => {
-        exportExcel(data);
+        exportExcel(spotList);
     }
 
     const exportPdfFile = () => {
-        exportPdf(data);
+        exportPdf(spotList);
     };
 
     return (
