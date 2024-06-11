@@ -5,7 +5,9 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from 'formik';
 import { Avatar } from "primereact/avatar";
-import { infoMsg } from "../../functions/Messages";
+import { infoMsg, warnMsg } from "../../functions/Messages";
+import { useSpotSearch } from "../../hooks/spot/useSpotSearch";
+import { useEffect, useState } from "react";
 
 export default function SearchDialog(props) {
     const formik = useFormik({
@@ -27,10 +29,42 @@ export default function SearchDialog(props) {
         onSubmit: async (values, actions) => {
             const data = values;
 
+            setQueryParams({ ...queryParams, initialDate: new Date(formik.values.dateRange[0]).toISOString().split('T')[0] });
+            setQueryParams({ ...queryParams, finalDate: new Date(formik.values.dateRange[1]).toISOString().split('T')[1] });
+            setQueryParams({ ...queryParams, title: data.title });
+            setQueryParams({ ...queryParams, companyName: data.company.name });
+            setQueryParams({ ...queryParams, announcerName: data.announcer.name });
+
+            props.setSpotList(spotList);
+
             props.closeSearchDialog();
-            infoMsg(props.toast, 'Busca realizada com sucesso.');
+
+            spotList.length === 0 ? warnMsg(props.toast, 'Nenhum spot encontrado.') : infoMsg(props.toast, 'Busca realizada com sucesso.');
         },
     });
+
+    const isValidDate = (dateString) => {
+        const date = new Date(dateString);
+        return date instanceof Date && !isNaN(date);
+    };
+
+    const [queryParams, setQueryParams] = useState({
+        initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? '' : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
+        finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? '' : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
+        companyName: formik.values.company.name,
+        announcerName: formik.values.announcer.name
+    });
+
+    useEffect(() => {
+        setQueryParams({
+            initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? '' : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
+            finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? '' : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
+            companyName: formik.values.company.name,
+            announcerName: formik.values.announcer.name
+        });
+    }, [formik.values.dateRange, formik.values.company, formik.values.announcer]);
+
+    const { data: spotList } = useSpotSearch(queryParams);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
 
