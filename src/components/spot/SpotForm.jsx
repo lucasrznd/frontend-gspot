@@ -299,9 +299,9 @@ export default function SpotForm(props) {
                 </div>
             </Dialog>
 
-            <SearchDialog toast={toast} searchVisible={searchVisible} closeSearchDialog={closeSearchDialog} formik={formik}
+            {/* <SearchDialog toast={toast} searchVisible={searchVisible} closeSearchDialog={closeSearchDialog} formik={formik}
                 companyList={companyList} companyCompleteMethod={companyCompleteMethod} announcerList={announcerList}
-                announcerCompleteMethod={announcerCompleteMethod} />
+                announcerCompleteMethod={announcerCompleteMethod} /> */}
         </div>
     )
 }
