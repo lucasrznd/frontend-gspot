@@ -18,6 +18,8 @@ import SearchDialog from "./SearchDialog";
 import { Avatar } from "primereact/avatar";
 import { useCompanyData } from "../../hooks/company/useCompanyData";
 import { useAnnouncerData } from "../../hooks/announcer/useAnnouncerData";
+import { useSpotCalculatePrice } from "../../hooks/spot/useSpotCalculatePrice";
+import { parseDate } from "../../functions/StringFormat";
 
 export default function SpotForm(props) {
     const [visualizarModal, setVisualizarModal] = useState(false);
@@ -97,9 +99,23 @@ export default function SpotForm(props) {
         },
     });
 
+    const [queryParams, setQueryParams] = useState({
+        duration: formik.values.duration === '' ? 0 : formik.values.duration,
+        activeContract: formik.values.activeContract
+    });
+
     useEffect(() => {
         closeDialogForm();
     }, [isSuccess]);
+
+    useEffect(() => {
+        setQueryParams({
+            duration: formik.values.duration === "" ? 0 : formik.values.duration,
+            activeContract: formik.values.activeContract
+        })
+    }, [formik.values.duration, formik.values.activeContract]);
+
+    const { data: spotPrice } = useSpotCalculatePrice(queryParams);
 
     const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
 
@@ -132,8 +148,8 @@ export default function SpotForm(props) {
         formik.setFieldValue('title', spot.title);
         formik.setFieldValue('company', spot.company);
         formik.setFieldValue('announcer', spot.announcer);
-        formik.setFieldValue('date', new Date(spot.date));
-        formik.setFieldValue('duration', spot.duration);
+        formik.setFieldValue('date', parseDate(spot.date));
+        formik.setFieldValue('duration', Number(spot.duration).toFixed(2));
         formik.setFieldValue('activeContract', spot.activeContract);
         formik.setFieldValue('price', spot.price);
         setVisualizarModal(true);
@@ -191,11 +207,29 @@ export default function SpotForm(props) {
         );
     };
 
+    const onChangeDuration = (e) => {
+        formik.setFieldValue('duration', e.value);
+        setQueryParams({ ...queryParams, duration: Number(e.value).toFixed(2) });
+        onChangePrice();
+    }
+
+    const onChangeActiveContract = (e) => {
+        formik.setFieldValue('activeContract', e.checked);
+        onChangePrice();
+    }
+
+    const onChangePrice = () => {
+        formik.setFieldValue('price', spotPrice);
+    }
+
     return (
         <div>
             <Toast ref={toast} />
 
-            <SpotTable startContent={startContent} spotDetails={spotDetails} setEmpresa={props.setEmpresa} />
+            <SpotTable startContent={startContent} spotDetails={spotDetails} setEmpresa={props.setEmpresa}
+                toast={toast} searchVisible={searchVisible} closeSearchDialog={closeSearchDialog} formik={formik}
+                companyList={companyList} companyCompleteMethod={companyCompleteMethod} announcerList={announcerList}
+                announcerCompleteMethod={announcerCompleteMethod} />
 
             <Dialog header="Detalhes do Spot" visible={visualizarModal} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => setVisualizarModal(false)}
                 footer={modalFooter} draggable={false}>
@@ -256,7 +290,7 @@ export default function SpotForm(props) {
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-calendar"></i>
                                 </span>
-                                <Calendar id="date" value={formik.values.date} onChange={(e) => formik.setFieldValue('date', e.value)} dateFormat="dd/mm/yy" locale="pt-BR" />
+                                <Calendar id="date" value={formik.values.date} onChange={(e) => formik.setFieldValue('date', new Date(e.value))} dateFormat="dd/mm/yy" locale="pt-BR" />
                             </div>
                         </div>
 
@@ -270,7 +304,7 @@ export default function SpotForm(props) {
                                     id="duration"
                                     name="duration"
                                     value={formik.values.duration}
-                                    onChange={formik.handleChange}
+                                    onChange={(e) => onChangeDuration(e)}
                                     mask="9.99"
                                     className={isFormFieldValid('duration') ? "p-invalid uppercase" : "uppercase"} />
                             </div>
@@ -279,8 +313,8 @@ export default function SpotForm(props) {
 
                         <div className="field">
                             <div className="flex align-items-stretch flex-wrap">
-                                <label htmlFor='duration'>Contrato Ativo:</label>
-                                <Checkbox onChange={(e) => formik.setFieldValue('activeContract', e.checked)} checked={formik.values.activeContract}
+                                <label htmlFor='activeContract'>Contrato Ativo:</label>
+                                <Checkbox onChange={(e) => onChangeActiveContract(e)} checked={formik.values.activeContract}
                                     className="ml-2" />
                             </div>
                         </div>
@@ -291,7 +325,7 @@ export default function SpotForm(props) {
                                 <span className="p-inputgroup-addon">
                                     <i className="pi pi-dollar"></i>
                                 </span>
-                                <InputNumber id="price" value={formik.values.price} onValueChange={(e) => formik.setFieldValue('price', e.value)}
+                                <InputNumber id="price" value={formik.values.price} onValueChange={onChangePrice}
                                     mode="currency" currency="BRL" locale="pt-BR" disabled />
                             </div>
                         </div>
