@@ -10,6 +10,7 @@ import { useSpotCounter } from "../../hooks/spot/useSpotCounter";
 import { useCompanyCounter } from "../../hooks/company/useCompanyCounter";
 import { useSpotAmountRaised } from "../../hooks/spot/useSpotAmountRaised";
 import { useSpotLatest } from "../../hooks/spot/useSpotLatest";
+import AnnouncerChart from "../charts/AnnouncerChart";
 
 export default function HomeBody() {
     const toast = useRef(null);
@@ -17,6 +18,7 @@ export default function HomeBody() {
     const { data: spotCounter } = useSpotCounter();
     const { data: companyCounter } = useCompanyCounter();
     const { data: spotAmountRaised } = useSpotAmountRaised();
+    const translatedMonths = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     const imageBodyCompany = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
@@ -90,6 +92,22 @@ export default function HomeBody() {
                             </div>
                             <div className="flex md:align-items-center align-items-stretch flex-wrap">
                                 <span className="text-600 font-bold text-xl flex align-items-center justify-content-center">{priceFormat(spotAmountRaised)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="grit-mt1">
+                    <div className="col-6 md:col-4">
+                        <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round" style={{ height: '400px', width: '100%', overflow: 'hidden' }}>
+                            <div className="flex justify-content-between">
+                                <div>
+                                    <span className="block text-primary font-bold mb-3">Top Locutores Mês de {translatedMonths[new Date().getMonth()]}/{new Date().getFullYear()}</span>
+                                </div>
+                            </div>
+                            <div className="flex align-items-center justify-content-center" style={{ height: 'calc(100% - 48px)' }}>
+                                <div className="flex align-items-center justify-content-center" style={{ height: '100%', width: '100%' }}>
+                                    <AnnouncerChart />
+                                </div>
                             </div>
                         </div>
                     </div>
