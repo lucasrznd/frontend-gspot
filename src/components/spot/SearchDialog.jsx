@@ -49,16 +49,16 @@ export default function SearchDialog(props) {
     };
 
     const [queryParams, setQueryParams] = useState({
-        initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? '' : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
-        finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? '' : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
+        initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? new Date().toISOString().split('T')[0] : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
+        finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? new Date().toISOString().split('T')[0] : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
         companyName: formik.values.company.name,
         announcerName: formik.values.announcer.name
     });
 
     useEffect(() => {
         setQueryParams({
-            initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? '' : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
-            finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? '' : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
+            initialDate: formik.values.dateRange[0] === '' || !isValidDate(formik.values.dateRange[0]) ? new Date().toISOString().split('T')[0] : new Date(formik.values.dateRange[0]).toISOString().split('T')[0],
+            finalDate: formik.values.dateRange[1] === '' || !isValidDate(formik.values.dateRange[1]) ? new Date().toISOString().split('T')[0] : new Date(formik.values.dateRange[1]).toISOString().split('T')[0],
             companyName: formik.values.company.name,
             announcerName: formik.values.announcer.name
         });
