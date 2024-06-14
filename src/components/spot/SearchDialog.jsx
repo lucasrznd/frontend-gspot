@@ -100,7 +100,7 @@ export default function SearchDialog(props) {
     };
 
     return <>
-        <Dialog header="Detalhes do Spot" visible={props.searchVisible} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => props.setSearchVisible(false)}
+        <Dialog header="Detalhes do Spot" visible={props.searchVisible} style={{ width: '40vw', minWidth: "40vw" }} breakpoints={{ '960px': '65vw', '641px': '70vw' }} onHide={() => props.closeSearchDialog(false)}
             footer={modalFooter} draggable={false}>
             <div className="card p-fluid">
                 <form onSubmit={formik.handleSubmit}>
