@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-import { useAnnouncerTopMonthly } from '../../hooks/announcer/useAnnouncerTopMonthly';
+import { useAnnouncerTopMonthly } from '../../hooks/top_monthly/useAnnouncerTopMonthly';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function AnnouncerChart() {
     const { data, isLoading, isError } = useAnnouncerTopMonthly();
@@ -60,7 +61,7 @@ export default function AnnouncerChart() {
     }, [isLoading, isError, data]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div><ProgressSpinner /></div>;
     }
 
     if (isError) {
