@@ -1,7 +1,7 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Toast } from "primereact/toast";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Avatar } from "primereact/avatar";
 import { dateFormat, priceFormat } from "../../functions/StringFormat";
 import { errorMsg } from "../../functions/Messages";
@@ -9,30 +9,51 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useSpotCounter } from "../../hooks/spot/useSpotCounter";
 import { useCompanyCounter } from "../../hooks/company/useCompanyCounter";
 import { useSpotAmountRaised } from "../../hooks/spot/useSpotAmountRaised";
+import { useSpotAmountRaisedMonth } from "../../hooks/spot/useSpotAmountRaisedMonth";
 import { useSpotLatest } from "../../hooks/spot/useSpotLatest";
 import AnnouncerChart from "../charts/AnnouncerChart";
+import CompanyChart from "../charts/CompanyChart";
+import ImageDialog from "../dialog/ImageDialog";
+import CarouselComponent from "../media/CarouselComponent";
 
 export default function HomeBody() {
     const toast = useRef(null);
+    const [spot, setSpot] = useState({});
+    const [imageVisible, setImageVisible] = useState(false);
     const { data, isError, isLoading, isSuccess: loadDataSuccess } = useSpotLatest();
     const { data: spotCounter } = useSpotCounter();
     const { data: companyCounter } = useCompanyCounter();
     const { data: spotAmountRaised } = useSpotAmountRaised();
+    const { data: spotAmountRaisedMonth } = useSpotAmountRaisedMonth();
     const translatedMonths = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     const imageBodyCompany = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <Avatar icon="pi pi-building" image={rowData.company.urlImage} className="mr-2 shadow-4" shape="circle" />
+            <Avatar icon="pi pi-building" image={rowData.company.urlImage} onClick={(e) => openImgDialogCompany(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
             <p>{rowData.company.name.toUpperCase()}</p>
         </div>
     };
 
     const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} className="mr-2 shadow-4" shape="circle" />
+            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
             <p>{rowData.announcer.name.toUpperCase()}</p>
         </div>
     };
+
+    const closeTableImageDialog = () => {
+        setImageVisible(false);
+    }
+
+    const openImgDialogCompany = (rowData) => {
+        setSpot({ ...spot, urlImage: rowData });
+        rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
+    }
+
+    const openImgDialogAnnouncer = (rowData) => {
+        setSpot({ ...spot, urlImage: rowData });
+        rowData !== undefined ? setImageVisible(true) : setImageVisible(false)
+    }
 
     const showBody = () => {
         if (isLoading) {
@@ -84,7 +105,23 @@ export default function HomeBody() {
                         <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
                             <div className="flex justify-content-between mb-3">
                                 <div>
-                                    <span className="block text-500 font-medium mb-3 font-bold">Total Acumulado</span>
+                                    <span className="block text-500 font-medium mb-3 font-bold">Total Acumulado - {translatedMonths[new Date().getMonth()]}/{new Date().getFullYear()}</span>
+                                </div>
+                                <div className="flex align-items-center justify-content-center bg-green-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
+                                    <i className="pi pi-dollar text-green-700 text-xl"></i>
+                                </div>
+                            </div>
+                            <div className="flex md:align-items-center align-items-stretch flex-wrap">
+                                <span className="text-600 font-bold text-xl flex align-items-center justify-content-center">{priceFormat(spotAmountRaisedMonth)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
+                            <div className="flex justify-content-between mb-3">
+                                <div>
+                                    <span className="block text-500 font-medium mb-3 font-bold">Total Acumulado Geral</span>
                                 </div>
                                 <div className="flex align-items-center justify-content-center bg-green-100 border-round" style={{ width: '2.5rem', height: '2.5rem' }}>
                                     <i className="pi pi-dollar text-green-700 text-xl"></i>
@@ -96,22 +133,54 @@ export default function HomeBody() {
                         </div>
                     </div>
                 </div>
-                <div className="grit-mt1">
-                    <div className="col-6 md:col-4">
+
+                <div className="grid mt-1">
+                    <div className="col-12 md:col-6 lg:col-4">
                         <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round" style={{ height: '400px', width: '100%', overflow: 'hidden' }}>
                             <div className="flex justify-content-between">
                                 <div>
-                                    <span className="block text-primary font-bold mb-3">Top Locutores Mês de {translatedMonths[new Date().getMonth()]}/{new Date().getFullYear()}</span>
+                                    <span className="block text-primary font-bold mb-3">Top Locutores - {translatedMonths[new Date().getMonth()]}/{new Date().getFullYear()}</span>
                                 </div>
                             </div>
-                            <div className="flex align-items-center justify-content-center" style={{ height: 'calc(100% - 48px)' }}>
+                            <div className="flex align-items-center justify-content-center" style={{ height: '100%' }}>
                                 <div className="flex align-items-center justify-content-center" style={{ height: '100%', width: '100%' }}>
                                     <AnnouncerChart />
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div className="col-12 md:col-6 lg:col-5">
+                        <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round" style={{ height: '400px', width: '100%', overflow: 'hidden' }}>
+                            <div className="flex justify-content-between">
+                                <div>
+                                    <span className="block text-primary font-bold mb-3">Top Empresas - {translatedMonths[new Date().getMonth()]}/{new Date().getFullYear()}</span>
+                                </div>
+                            </div>
+                            <div className="flex align-items-center justify-content-center" style={{ height: 'calc(100% - 48px)' }}>
+                                <div className="flex align-items-center justify-content-center" style={{ height: '100%', width: '100%' }}>
+                                    <CompanyChart />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round" style={{ height: '400px', width: '100%', overflow: 'hidden' }}>
+                            <div className="flex justify-content-between">
+                                <div>
+                                    <span className="block text-primary font-bold mb-3">Locutores</span>
+                                </div>
+                            </div>
+                            <div className="flex align-items-center justify-content-center" style={{ height: 'calc(100% - 48px)' }}>
+                                <div className="flex align-items-center justify-content-center">
+                                    <CarouselComponent />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="grid mt-1">
                     <div className="col-12 md:col-12">
                         <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
@@ -125,7 +194,7 @@ export default function HomeBody() {
                                 <Column field="company.name" header="Empresa" body={(rowData) => imageBodyCompany(rowData)} align="center" alignHeader="center"></Column>
                                 <Column field="announcer.name" header="Locutor" body={(rowData) => imageBodyAnnouncer(rowData)} align="center" alignHeader="center"></Column>
                                 <Column field="date" header="Data" body={(rowData) => dateFormat(rowData, 'date')} align="center" alignHeader="center"></Column>
-                                <Column field="duration" header="Duração" align="center" alignHeader="center"></Column>
+                                <Column field="duration" header="Duração" body={(rowData) => Number(rowData.duration).toFixed(2)} align="center" alignHeader="center"></Column>
                                 <Column field="price" header="Preço" body={(rowData) => priceFormat(rowData.price)} className="font-bold" align="center" alignHeader="center"></Column>
                             </DataTable>
                         </div>
@@ -141,6 +210,7 @@ export default function HomeBody() {
 
     return <div>
         <Toast ref={toast} />
+        <ImageDialog visible={imageVisible} onHide={closeTableImageDialog} header="Imagem da Spot" src={spot.urlImage} />
 
         {showBody()}
     </div>

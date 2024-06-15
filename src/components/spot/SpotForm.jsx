@@ -14,7 +14,6 @@ import { InputMask } from "primereact/inputmask";
 import { Checkbox } from "primereact/checkbox";
 import { InputNumber } from "primereact/inputnumber";
 import { addLocale } from 'primereact/api';
-import SearchDialog from "./SearchDialog";
 import { Avatar } from "primereact/avatar";
 import { useCompanyData } from "../../hooks/company/useCompanyData";
 import { useAnnouncerData } from "../../hooks/announcer/useAnnouncerData";
