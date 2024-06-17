@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from 'primereact/button';
 import { Carousel } from 'primereact/carousel';
-import { Tag } from 'primereact/tag';
 import { useAnnouncerData } from '../../hooks/announcer/useAnnouncerData';
 import { formatPhoneNumber } from '../../functions/StringFormat';
 import { Avatar } from 'primereact/avatar';
+import { whatsappMessage } from '../../functions/WhatsappFunction';
 
 export default function CarouselComponent() {
     const { data, error, isLoading } = useAnnouncerData();
@@ -23,6 +23,10 @@ export default function CarouselComponent() {
     ];
 
     const announcerTemplate = (announcer) => {
+        const handleClickWhatsappMessage = () => {
+            whatsappMessage(announcer.phoneNumber);
+        }
+
         return (
             <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
                 <div className="mb-1">
@@ -31,7 +35,7 @@ export default function CarouselComponent() {
                 </div>
                 <div>
                     <h4 className="mb-2 text-primary font-bold">{announcer.name}</h4>
-                    <Button icon="pi pi-whatsapp" rounded text severity="success" aria-label="Search" />
+                    <Button icon="pi pi-whatsapp" onClick={handleClickWhatsappMessage} rounded text severity="success" aria-label="Search" />
                     <h6 className="mt-0 mb-3">{formatPhoneNumber(announcer, 'phoneNumber')}</h6>
                 </div>
             </div>
