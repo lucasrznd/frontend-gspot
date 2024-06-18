@@ -34,7 +34,7 @@ export default function CarouselComponent() {
                         className="shadow-4" size='xlarge' shape="circle" />
                 </div>
                 <div>
-                    <h4 className="mb-2 text-primary font-bold">{announcer.name}</h4>
+                    <h4 className="mb-2 text-primary font-bold">{announcer.name.toUpperCase()}</h4>
                     <Button icon="pi pi-whatsapp" onClick={handleClickWhatsappMessage} rounded text severity="success" aria-label="Search" />
                     <h6 className="mt-0 mb-3">{formatPhoneNumber(announcer, 'phoneNumber')}</h6>
                 </div>
