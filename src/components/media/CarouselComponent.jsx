@@ -30,7 +30,7 @@ export default function CarouselComponent() {
         return (
             <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
                 <div className="mb-1">
-                    <Avatar icon='pi pi-users' image={announcer.urlImage}
+                    <Avatar icon='pi pi-user' image={announcer.urlImage}
                         className="shadow-4" size='xlarge' shape="circle" />
                 </div>
                 <div>

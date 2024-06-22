@@ -36,7 +36,7 @@ export default function HomeBody() {
 
     const imageBodyAnnouncer = (rowData) => {
         return <div className='flex align-items-center justify-content-center'>
-            <Avatar icon="pi pi-building" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
+            <Avatar icon="pi pi-user" image={rowData.announcer.urlImage} onClick={(e) => openImgDialogAnnouncer(e.target.currentSrc)} className="mr-2 shadow-4" shape="circle" />
             <p>{rowData.announcer.name.toUpperCase()}</p>
         </div>
     };
