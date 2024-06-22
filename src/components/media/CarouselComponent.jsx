@@ -5,6 +5,7 @@ import { useAnnouncerData } from '../../hooks/announcer/useAnnouncerData';
 import { formatPhoneNumber } from '../../functions/StringFormat';
 import { Avatar } from 'primereact/avatar';
 import { whatsappMessage } from '../../functions/WhatsappFunction';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function CarouselComponent() {
     const { data, error, isLoading } = useAnnouncerData();
@@ -43,11 +44,14 @@ export default function CarouselComponent() {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <ProgressSpinner />;
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div className='flex align-items-center justify-content-center'>
+            <i className="pi pi-exclamation-circle mr-2 text-red-500"></i>
+            <h3 className='text-red-500'>Erro ao carregar locutores.</h3>
+        </div>;
     }
 
     return (

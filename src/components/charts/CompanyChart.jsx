@@ -61,7 +61,10 @@ export default function CompanyChart() {
     }
 
     if (isError) {
-        return <div>Error loading data</div>;
+        return <div className='flex align-items-center justify-content-center'>
+            <i className="pi pi-exclamation-circle mr-2 text-red-500"></i>
+            <h3 className='text-red-500'>Erro ao carregar empresas.</h3>
+        </div>;;
     }
 
     return (
