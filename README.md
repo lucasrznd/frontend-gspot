@@ -62,7 +62,7 @@ Frontend desenvolvido em ReactJS para API de gerenciamento de SPOTS, que são gr
 
 <h2 id="installation">🛠️ Instalação</h2>
 
-Follow the steps below to set up the project on your local machine:
+Siga os passos abaixo para configurar o projeto em sua máquina local:
 
 1. Clone o repositório:
     ```bash
