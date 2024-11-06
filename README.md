@@ -1,4 +1,4 @@
-<h2 align="center">SPOT Management System</h2>
+<h2 align="center">Sistema Gerenciador de SPOTS</h2>
 
 <div align="center">
 
@@ -8,58 +8,78 @@
 </div>
 
 <p align="center">
- <a href="#description">Description</a> • 
- <a href="#features">Features</a> • 
- <a href="#installation">Installation</a> •
- <a href="#contribution">Contribution</a> 
+ <a href="#description">Descrição</a> • 
+ <a href="#features">Funcionalidades</a> • 
+ <a href="#installation">Instalação</a> •
+ <a href="#contribution">Contribuição</a> 
 </p>
 
-<h2 id="description">📙 Description</h2>
+<h2 id="description">📙 Descrição</h2>
 
-The **SPOT Management System** is a web application developed in ReactJS for managing SPOTS, which are short recordings sold by a radio company. The application allows you to register announcers, associated companies, and spots, making it easy to control and search for all registered spots.
+Frontend desenvolvido em ReactJS para API de gerenciamento de SPOTS, que são gravações curtas vendidas por uma empresa de rádio. A aplicação permite o cadastro de locutores, empresas associadas e spots, facilitando o controle e a pesquisa de todos os spots registrados.
 
-<h2 id="features">✨ Features</h2>
+<h2 id="features">✨ Funcionalidades</h2>
 
-- **Announcer Registration**: Add and manage announcers who make the recordings.
-- **Company Registration**: Add and manage companies associated with the recordings.
-- **Spot Registration**: Add and manage spots, specifying the title, announcer, and associated company.
-- **Spot Search**: Perform searches to quickly find specific spots.
+- **Tela de Locutores**: Adicione e gerencie locutores que realizam as gravações.
+- **Tela de Empresas**: Adicione e gerencie empresas associadas às gravações.
+- **Tela de Spots**: Adicione e gerencie spots, especificando o título, locutor e empresa associada.
 
-### Technologies Used
+### Tecnologias Utilizadas
 
-- **ReactJS**: JavaScript library for building user interfaces.
-- **PrimeReact**: UI component library for React.
-- **Primeflex**: CSS utility library for flexible layouts.
-- **React Query**: Library for server state management and data caching.
-- **Jest**: JavaScript testing framework.
+- **ReactJS**: Biblioteca JavaScript para construção de interfaces de usuário.
+- **PrimeReact**: Biblioteca de componentes de UI para React.
+- **Primeflex**: Biblioteca de utilitários CSS para layouts flexíveis.
+- **React Query**: Biblioteca para gerenciamento de estado do servidor e cache de dados.
 
-### Prerequisites
+<h2 id="screens">🖥️ Telas</h2>
 
-Before starting, make sure you have the following tools installed on your machine:
+<table>
+<tr>
+    <td align="center">Locutores</td>
+     <td align="center">Empresas</td>
+  </tr>
+  <tr>
+    <td><img width="650" alt="Prancheta 1" src="https://github.com/user-attachments/assets/6633c0fb-26e2-486c-bcc5-0f16ab3978e6"> </td>
+    <td><img width="650" alt="Pranchea 2" src="https://github.com/user-attachments/assets/d446f8ae-d411-441d-a26c-eb81fd97875b"></td>
+  </tr>
+</table>
 
-- [Node.js](https://nodejs.org/) (version 14 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+<table>
+<tr>
+    <td align="center">Spots</td>
+     <td align="center">Home</td>
+  </tr>
+  <tr>
+    <td><img width="650" alt="Prancheta 3" src="https://github.com/user-attachments/assets/8452e17a-c617-4274-9ec3-8e1daa90999c"></td>
+    <td><img width="650" alt="Prancheta 4" src="https://github.com/user-attachments/assets/bd12ba79-3f0e-4d20-8287-029d2e76f945"></td>
+  </tr>
+</table>
 
-<h2 id="installation">🛠️ Installation</h2>
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (versão 14 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+
+<h2 id="installation">🛠️ Instalação</h2>
 
 Follow the steps below to set up the project on your local machine:
 
-1. Clone the repository:
+1. Clone o repositório:
     ```bash
     git clone https://github.com/lucasrznd/frontend-gspot.git
     cd frontend-gspot
     ```
 
-2. Install the project dependencies:
+2. Instale as dependências do projeto:
     ```bash
     npm install
     # or
     yarn install
     ```
 
-### Running the Application
+### Rodando a aplicação
 
-To start the application in development mode, run the command:
+Para iniciar a aplicação em modo de desenvolvimento, execute o comando:
 
 ```bash
 npm start
@@ -67,9 +87,9 @@ npm start
 yarn start
 ```
 
-<h2 id="contribution">🤝 Contribution</h2>
+<h2 id="contribution">🤝 Contribuição</h2>
 
-Contributions are welcome! If you have suggestions, improvements, or find bugs, feel free to open an issue or submit a pull request.
+Contribuições são bem-vindas! Se você tiver sugestões, melhorias ou encontrar bugs, sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
 <h2 id="author">👨🏻‍💻 Author</h2>
 
